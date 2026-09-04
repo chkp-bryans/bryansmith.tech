@@ -1,25 +1,25 @@
 {
   "repos": [
     {
-      "repo": "bryans_chkpsw/cloud-security-reference-architecture",
+      "repo": "chkp-bryans/cloud-security-reference-architecture",
       "description": "Reference architecture for secure cloud delivery patterns.",
       "stars": 0,
       "highlight": "Architecture"
     },
     {
-      "repo": "bryans_chkpsw/devsecops-pipeline-blueprint",
+      "repo": "chkp-bryans/devsecops-pipeline-blueprint",
       "description": "CI/CD pipeline blueprint with integrated security controls.",
       "stars": 0,
       "highlight": "DevSecOps"
     },
     {
-      "repo": "bryans_chkpsw/waf-observability-toolkit",
+      "repo": "chkp-bryans/waf-observability-toolkit",
       "description": "WAF telemetry and observability toolkit.",
       "stars": 0,
       "highlight": "Security"
     },
     {
-      "repo": "bryans_chkpsw/platform-engineering-labs",
+      "repo": "chkp-bryans/platform-engineering-labs",
       "description": "Platform engineering experiments and reusable modules.",
       "stars": 0,
       "highlight": "Platform"

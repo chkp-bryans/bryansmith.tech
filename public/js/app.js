@@ -27,7 +27,7 @@ function blogCard(post) {
   const tags = (post.tags || []).map((t) => `<span class="badge">${t}</span>`).join("");
   return `
     <article class="card">
-      <h3>${post.title}</h3>
+      <h3><a href="/api/blog/${encodeURIComponent(post.slug)}" data-article-slug="${encodeURIComponent(post.slug)}">${post.title}</a></h3>
       <p>${post.excerpt}</p>
       <div class="card-meta">
         <span class="badge">${post.date || "Undated"}</span>
@@ -36,6 +36,38 @@ function blogCard(post) {
       <p class="card-meta">${tags}</p>
     </article>
   `;
+}
+
+async function openArticle(slug) {
+  const dialog = document.getElementById("article-dialog");
+  const title = document.getElementById("article-title");
+  const date = document.getElementById("article-date");
+  const body = document.getElementById("article-body");
+  body.textContent = "Loading article...";
+  dialog.showModal();
+  try {
+    const post = await getJSON(`/api/blog/${encodeURIComponent(slug)}`);
+    title.textContent = post.title;
+    date.textContent = `${post.date} | ${estimateReadTime(post.body)}`;
+    body.innerHTML = post.html;
+  } catch (_err) {
+    body.textContent = "Unable to load this article right now.";
+  }
+}
+
+function initArticleDialog() {
+  const dialog = document.getElementById("article-dialog");
+  const close = dialog.querySelector(".dialog-close");
+  document.getElementById("blog-grid").addEventListener("click", (event) => {
+    const link = event.target.closest("[data-article-slug]");
+    if (!link) return;
+    event.preventDefault();
+    openArticle(decodeURIComponent(link.dataset.articleSlug));
+  });
+  close.addEventListener("click", () => dialog.close());
+  dialog.addEventListener("click", (event) => {
+    if (event.target === dialog) dialog.close();
+  });
 }
 
 function renderLoading(target, count) {
@@ -87,5 +119,6 @@ function initMobileNav() {
 
 document.getElementById("year").textContent = new Date().getFullYear();
 initMobileNav();
+initArticleDialog();
 loadProjects();
 loadBlog();
