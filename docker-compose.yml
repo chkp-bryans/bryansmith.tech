@@ -20,3 +20,27 @@ services:
       retries: 5
       start_period: 15s
     restart: unless-stopped
+
+  appsec-waf:
+    image: checkpoint/cloudguard-appsec-standalone:latest
+    container_name: bryansmith-appsec-waf
+    command: ["/cloudguard-appsec-standalone", "--token", "${NANO_PROFILE_TOKEN}"]
+    depends_on:
+      app:
+        condition: service_healthy
+    expose:
+      - "80"
+      - "443"
+      - "8117"
+    volumes:
+      - appsec-conf:/etc/cp/conf
+      - appsec-data:/etc/cp/data
+      - appsec-logs:/var/log/nano_agent
+      - appsec-certs:/etc/certs
+    restart: unless-stopped
+
+volumes:
+  appsec-conf:
+  appsec-data:
+  appsec-logs:
+  appsec-certs:
