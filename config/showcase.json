@@ -1,28 +1,28 @@
 {
   "repos": [
     {
-      "repo": "chkp-bryans/cloud-security-reference-architecture",
-      "description": "Reference architecture for secure cloud delivery patterns.",
+      "repo": "chkp-bryans/web-detective",
+      "description": "A Python toolkit for investigating web behavior and security signals.",
       "stars": 0,
-      "highlight": "Architecture"
+      "highlight": "Security tooling"
     },
     {
-      "repo": "chkp-bryans/devsecops-pipeline-blueprint",
-      "description": "CI/CD pipeline blueprint with integrated security controls.",
+      "repo": "chkp-bryans/terraform-azure-vwan-checkpoint",
+      "description": "Terraform deployment for Azure Virtual WAN, hubs, and Check Point NVAs.",
+      "stars": 0,
+      "highlight": "Azure infrastructure"
+    },
+    {
+      "repo": "chkp-bryans/shiftleft-cicd-demo",
+      "description": "A practical CI/CD security demonstration for shifting controls left.",
       "stars": 0,
       "highlight": "DevSecOps"
     },
     {
-      "repo": "chkp-bryans/waf-observability-toolkit",
-      "description": "WAF telemetry and observability toolkit.",
+      "repo": "chkp-bryans/search-th-extension",
+      "description": "Chrome extension for searching selected text in Check Point Threat Hunting.",
       "stars": 0,
-      "highlight": "Security"
-    },
-    {
-      "repo": "chkp-bryans/platform-engineering-labs",
-      "description": "Platform engineering experiments and reusable modules.",
-      "stars": 0,
-      "highlight": "Platform"
+      "highlight": "Browser extension"
     }
   ]
 }
