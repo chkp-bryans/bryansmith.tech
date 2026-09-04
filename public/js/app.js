@@ -117,8 +117,37 @@ function initMobileNav() {
   });
 }
 
+function initInteractions() {
+  const revealItems = document.querySelectorAll(".hero-panel, .linkedin-card, .section, .footer");
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.12 });
+  revealItems.forEach((item) => observer.observe(item));
+
+  document.addEventListener("pointermove", (event) => {
+    document.documentElement.style.setProperty("--pointer-x", `${event.clientX}px`);
+    document.documentElement.style.setProperty("--pointer-y", `${event.clientY}px`);
+  });
+
+  document.querySelectorAll(".card, .linkedin-card").forEach((card) => {
+    card.addEventListener("pointermove", (event) => {
+      const bounds = card.getBoundingClientRect();
+      const rotateX = ((event.clientY - bounds.top) / bounds.height - 0.5) * -3;
+      const rotateY = ((event.clientX - bounds.left) / bounds.width - 0.5) * 3;
+      card.style.setProperty("--tilt", `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
+    });
+    card.addEventListener("pointerleave", () => card.style.removeProperty("--tilt"));
+  });
+}
+
 document.getElementById("year").textContent = new Date().getFullYear();
 initMobileNav();
 initArticleDialog();
+initInteractions();
 loadProjects();
 loadBlog();

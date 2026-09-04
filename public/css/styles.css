@@ -10,6 +10,8 @@
   --focus: #ffd166;
   --border: #2d4269;
   --shadow: 0 14px 40px rgba(5, 12, 27, 0.35);
+  --pointer-x: 50vw;
+  --pointer-y: 0;
 }
 
 *,
@@ -28,6 +30,7 @@ body {
   color: var(--text);
   line-height: 1.6;
   background:
+    radial-gradient(360px 260px at var(--pointer-x) var(--pointer-y), rgba(108, 178, 255, 0.12), transparent 72%),
     radial-gradient(1200px 550px at 15% -5%, #1d3563 0%, transparent 65%),
     radial-gradient(900px 420px at 85% 0%, #0b2e4a 0%, transparent 65%),
     linear-gradient(170deg, var(--bg-2), var(--bg-1));
@@ -126,6 +129,23 @@ body {
   padding: 30px;
 }
 
+.hero-panel,
+.linkedin-card,
+.section,
+.footer {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 650ms ease, transform 650ms ease;
+}
+
+.hero-panel.is-visible,
+.linkedin-card.is-visible,
+.section.is-visible,
+.footer.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .eyebrow {
   margin: 0 0 8px;
   letter-spacing: 0.08em;
@@ -197,6 +217,40 @@ h3 {
   padding: 24px;
   position: relative;
   overflow: hidden;
+  transform: var(--tilt, translateY(0));
+  transition: border-color 180ms ease, transform 180ms ease;
+}
+
+.portrait-frame {
+  position: relative;
+  margin: -4px -4px 22px;
+  overflow: hidden;
+  aspect-ratio: 1;
+  border-radius: 12px;
+  background: var(--surface-2);
+}
+
+.portrait-frame img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+  object-position: center top;
+  filter: saturate(0.92) contrast(1.04);
+}
+
+.portrait-status {
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  padding: 7px 10px;
+  border: 1px solid rgba(137, 240, 209, 0.35);
+  border-radius: 7px;
+  color: var(--text);
+  background: rgba(7, 12, 23, 0.78);
+  font-size: 0.78rem;
+  backdrop-filter: blur(8px);
 }
 
 .linkedin-card::after {
@@ -223,6 +277,7 @@ h3 {
 
 .card {
   padding: 18px;
+  transform: var(--tilt, translateY(0));
   transition: border-color 180ms ease, transform 180ms ease;
 }
 
@@ -395,5 +450,13 @@ button:focus-visible {
     animation: none !important;
     transition: none !important;
     scroll-behavior: auto !important;
+  }
+
+  .hero-panel,
+  .linkedin-card,
+  .section,
+  .footer {
+    opacity: 1;
+    transform: none;
   }
 }
