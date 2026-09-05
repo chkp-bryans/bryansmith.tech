@@ -213,6 +213,10 @@ h3 {
   font-size: 1.04rem;
 }
 
+.hero-copy-secondary {
+  margin-top: 14px;
+}
+
 .cta-row {
   margin-top: 24px;
   display: flex;
