@@ -379,6 +379,38 @@ h3 {
   color: var(--accent);
 }
 
+#article-body img {
+  display: block;
+  max-width: 100%;
+  width: 100%;
+  height: auto;
+  margin: 1.1em auto 1.4em;
+  border-radius: 12px;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow);
+  background: #0b1220;
+}
+
+#article-body table {
+  display: block;
+  width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1em 0 1.3em;
+  font-size: 0.92rem;
+}
+
+#article-body th,
+#article-body td {
+  border: 1px solid var(--border);
+  padding: 0.45em 0.65em;
+  text-align: left;
+}
+
+#article-body tr:nth-child(even) td {
+  background: rgba(255, 255, 255, 0.03);
+}
+
 .card-meta {
   display: flex;
   flex-wrap: wrap;
