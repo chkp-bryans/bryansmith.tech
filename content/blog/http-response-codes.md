@@ -1,12 +1,15 @@
 ---
 title: "HTTP Response Codes, Explained Like You Actually Use Them"
 date: "2026-09-09"
+updated: "2026-09-21"
 excerpt: "A practical map of HTTP status codes—families, WAF/edge quirks, performance, and how AI agents waste tokens when they ignore them."
 tags: "HTTP, WAF, Security, APIs, Digital Workers"
 cover: "/http-status-codes-cheatsheet.png"
 ---
 
 Every request gets a three-digit answer. That number tells you whether to celebrate, fix your call, wait, or page someone. Learn the families once; the rest is pattern matching.
+
+> **Updated September 21, 2026:** IANA temporarily registered **104 Upload Resumption Supported** for the resumable-upload draft. See 1xx below. Other draft codes (e.g. proposed 419 Purpose Declined) are *not* registered—don’t treat the rumor mill as the registry.
 
 ![HTTP status codes cheat sheet](/http-status-codes-cheatsheet.png)
 
@@ -27,6 +30,9 @@ Every request gets a three-digit answer. That number tells you whether to celebr
 ---
 
 ## Codes you will actually see
+
+**1xx — Still working (rare)**  
+`100` continue · **`104` Upload Resumption Supported**—temporary IANA registration (first registered 2024-11-13; extension 2025-09-15; expires 2026-11-13), tied to `draft-ietf-httpbis-resumable-upload`. Interim/informational response advertising resumable upload support (`Location` / `Upload-Limit` / `Upload-Offset` style flow). Not a final permanent RFC—treat it as a temporary registration / draft, not carved-in-stone HTTP.
 
 **2xx — Success**  
 `200` OK · `201` created (check `Location`) · `202` accepted, not finished · `204` success with no body.
