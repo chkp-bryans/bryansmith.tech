@@ -1,63 +1,67 @@
 ---
 title: "HTTP got a new method: QUERY"
 date: "2026-09-21"
-excerpt: "RFC 10008 adds QUERY: safe and idempotent like GET, with a body like POST. Why it matters for APIs, caches, and WAFs."
+excerpt: "The web has a new way to ask for data with a detailed filter. What QUERY is, why it exists, and why security teams should care."
 tags: "HTTP, APIs, Security, WAF, Digital Workers"
 cover: "/covers/http-query.png"
 ---
 
-HTTP just got a new **IANA-registered general-purpose method on the standards track**, the first since PATCH in 2010: **QUERY** ([RFC 10008](https://www.rfc-editor.org/rfc/rfc10008.html), June 2026, Proposed Standard). Older WebDAV methods (SEARCH, PROPFIND, REPORT) were already safe and idempotent with a body; QUERY was chosen as the general-purpose name instead of extending those.
+The web already has a small set of **methods** (also called verbs). A method is the word that tells a server what kind of action you want: read something, create something, update something, and so on.
 
-For years we faked “read with a body.” The workarounds work until they don’t. Caches, retries, and proxies in the middle all get the wrong idea about what the request means.
+Common ones you may already know:
 
-**QUERY is the missing middle.** It is safe and idempotent like GET, and the request body carries the query like POST.
+- **GET:** “please read this.” Filters usually go in the web address (the URL).
+- **POST:** “please accept this data.” Often used to create or change something. The details go in the **request body**, which is the payload that rides with the request instead of sitting in the address bar.
+- **PUT / PATCH / DELETE:** change or remove something.
 
-In plain terms:
+In June 2026, the internet standards process published **RFC 10008**. An **RFC** is a formal technical document. This one adds a new method called **QUERY**. It is a **Proposed Standard**, which means it is the official method, but not yet the highest maturity label in the standards process.
 
-- **Safe** means the request is only asking for information. It should not create, change, or delete anything on the server.
-- **Idempotent** means you can send the same request again and the result is the same as sending it once. A flaky network can retry without inventing a second order, a second payment, or a second write.
+## The problem in plain English
 
-`Accept-Query` is the discovery header that tells clients which query formats (media types) the server accepts. Caching is written into the RFC (the cache key must include the request body), but shared caches, CDNs, and browsers will trail clients and servers while that support lands.
+Apps often need to **look something up** with a complicated filter. Example: “open orders for this customer, these tags, this date range.”
 
-### How we used to fake it
+For a long time the options were awkward:
 
-**GET: filters in the URL**
+1. **Cram the filter into the URL and use GET.** Fine for short, simple filters. Falls apart when the filter is long or nested (layered). Those details also show up in server logs.
+2. **Put the filter in the request body, but use POST.** The body works. The method name is misleading. Systems sitting in the middle (proxies, gateways, caches) often assume POST might create or change data, so they will not cache the answer or safely retry the request if the network blips.
 
-```http
-GET /orders?status=open&customerId=42&from=2024-01-01&to=2026-09-01&tags=vip,retry&sort=-createdAt HTTP/1.1
-```
+Neither option clearly says: “I am only asking a question.”
 
-Fine until the filter is nested JSON, a long list, or anything GraphQL-shaped. Then you hit URL length limits, spray details into access logs and `Referer` headers, and break caches that only key on the path.
+## What QUERY does
 
-**POST: a “search” that looks like a write**
+**QUERY means: ask a question, and put the filter details in the request body.**
 
-```http
-POST /orders/search HTTP/1.1
-Content-Type: application/json
+Think of it like a careful search form, not a “save” or “delete.”
 
-{ "status": "open", "tags": ["vip", "retry"], "range": { "from": "2024-01-01", "to": "2026-09-01" } }
-```
+Two properties matter here. We define them before we lean on them:
 
-The body works. The meaning lies. Proxies and gateways assume POST changes something, so they will not cache it or auto-retry it. Clients invent special “only run this once” keys for something that was only ever a read. (People rarely use PUT for this. PUT means replace a resource. The common hacks are a huge GET query string and POST used as search.)
+- **Safe:** the request should only read. It should not create, change, or delete data on the server.
+- **Idempotent:** if the network glitches and you send the same request twice, you get the same result as sending it once. No accidental second order, second payment, or second write.
 
-**QUERY: the honest read with a body**
+So QUERY is safe and idempotent like GET, but it can carry a rich filter in the body like POST.
 
-```http
-QUERY /orders HTTP/1.1
-Content-Type: application/json
-Accept-Query: application/json
+A few related terms, defined once:
 
-{ "status": "open", "tags": ["vip", "retry"], "range": { "from": "2024-01-01", "to": "2026-09-01" } }
-```
+- **Cache:** a store that remembers a previous answer so the next identical ask can be faster.
+- **CDN (content delivery network):** a network of caches around the world that sit in front of many websites.
+- **Allowlist:** an explicit list of what is permitted. Everything else is blocked.
 
-Same body as the POST hack, with GET-like safety: safe, idempotent, safe to retry, and cacheable per the RFC once implementations include the request content in the cache key (shared caches and CDNs will lag).
+Servers can advertise which filter formats they understand with a header named `Accept-Query` (a short label sent with the request or response). Caching QUERY answers is allowed in the RFC, but many caches and CDNs are still catching up, because the cache key must include the body, not just the URL.
+
+Older specialty methods from **WebDAV** (an older set of web extensions for files and folders), such as SEARCH, already allowed “safe read with a body.” QUERY is the general-purpose name for everyday APIs.
+
+## Quick picture
+
+- **Old approach (GET):** long URL full of filters
+- **Old approach (POST):** body looks like a search, but the method sounds like a change
+- **QUERY:** body holds the filter, method means “read”
 
 ## Why security and edge folks should care
 
-- **WAFs and gateways** that only allow GET/POST/PUT/PATCH/DELETE will need an allowlist update before QUERY works in production.
-- **Logging**: the interesting filter moves out of the query string. That is better for privacy in access logs, and worse if your SIEM only looked at URL params.
-- **Agents and automation**: teach digital workers that QUERY is a read. Do not treat it like a mutating POST. Retry with backoff the same way you would a GET.
+- A **WAF (web application firewall)** or API gateway that only allows the usual methods may block QUERY until you add it to the allowlist.
+- **Logs:** the interesting filter moves out of the URL. That is better for privacy in access logs, and worse if your monitoring only watched URL parameters.
+- **Automation and AI agents:** teach them QUERY is a read. Retry it like a GET, not like a risky POST.
 
-Adoption is early (frameworks and proxies are landing support; browser caching and HTML forms still lag). Treat it as additive: keep GET for simple lookups, use QUERY when the filter belongs in a body.
+Adoption is early. Keep simple lookups on GET. Use QUERY when the filter belongs in the body.
 
-If you want the status-code side of the house, the practical map is still here: [HTTP Response Codes, Explained Like You Actually Use Them](/writings/http-response-codes).
+If you want the status-code side of the house: [HTTP Response Codes, Explained Like You Actually Use Them](/writings/http-response-codes).
