@@ -131,8 +131,7 @@ The runtime image is `node:20-alpine`, which typically has **no `wget`**. Compos
 
 ## Plausible + shareable writings
 
-1. Create `bryansmith.tech` in Plausible.
-2. On Dokploy, set:
-   - `PLAUSIBLE_DOMAIN=bryansmith.tech`
-   - `SITE_URL=https://bryansmith.tech`
+1. Site is already registered in Plausible; the site-specific script is embedded in the app (no `PLAUSIBLE_DOMAIN` env required).
+2. On Dokploy, optionally set:
+   - `SITE_URL=https://bryansmith.tech` (Open Graph absolute URLs)
 3. Redeploy. Writings are shareable at `/writings/<slug>` (example: `/writings/nfl-ai-sideline-who-trusts-it`).

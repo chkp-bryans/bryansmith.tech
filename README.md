@@ -42,7 +42,7 @@ Current production is a **single Node/Express `app` container** on Dokploy (`dok
 - `GET /api/blog`
 - `GET /api/blog/:slug`
 - `GET /writings/:slug` (shareable writing page + Open Graph)
-- `GET /api/site-config` (Plausible domain when configured)
+- `GET /api/site-config` (site URL + analytics marker)
 
 ## Content Updates
 
@@ -85,6 +85,6 @@ The app image is `node:20-alpine`. Alpine does **not** ship `wget` by default. T
 
 ## Analytics (Plausible)
 
-Set `PLAUSIBLE_DOMAIN=bryansmith.tech` (and optionally `SITE_URL`) in the environment.
-If `PLAUSIBLE_DOMAIN` is empty, no script is injected. After deploy, create the site in the Plausible dashboard and point Dokploy env at that domain.
-Helmet CSP allows `https://plausible.io` for script and connect.
+The site-specific Plausible snippet is always embedded in `<head>` on the homepage and writing pages (hashed `pa-*.js` + `plausible.init()`).
+`PLAUSIBLE_DOMAIN` is not required. Optionally set `SITE_URL` for Open Graph absolute URLs.
+Helmet CSP allows `https://plausible.io` for `script-src` and `connect-src`, plus a `sha256-` hash of the inline init script (no `'unsafe-inline'` for scripts).

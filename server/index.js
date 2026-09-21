@@ -1,3 +1,4 @@
+const crypto = require("crypto");
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
@@ -11,14 +12,20 @@ const BLOG_DIR = path.join(__dirname, "..", "content", "blog");
 const SHOWCASE_FILE = path.join(__dirname, "..", "config", "showcase.json");
 const PUBLIC_DIR = path.join(__dirname, "..", "public");
 const SITE_URL = (process.env.SITE_URL || "https://bryansmith.tech").replace(/\/$/, "");
-const PLAUSIBLE_DOMAIN = (process.env.PLAUSIBLE_DOMAIN || "").trim();
+
+// Exact Plausible inline init body (hashed for CSP; keep in sync with plausibleSnippet).
+const PLAUSIBLE_INLINE = `  window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},plausible.init=plausible.init||function(i){plausible.o=i||{}};
+  plausible.init()`;
+const PLAUSIBLE_INLINE_HASH =
+  "'sha256-" + crypto.createHash("sha256").update("\n" + PLAUSIBLE_INLINE + "\n", "utf8").digest("base64") + "'";
 
 app.use(
   helmet({
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
-        "script-src": ["'self'", "https://plausible.io"],
+        // External hashed script host + sha256 of the inline plausible.init() body (no unsafe-inline).
+        "script-src": ["'self'", "https://plausible.io", PLAUSIBLE_INLINE_HASH],
         "connect-src": ["'self'", "https://plausible.io"],
         "img-src": ["'self'", "data:", "https:"],
         "style-src": ["'self'", "https:", "'unsafe-inline'"]
@@ -96,8 +103,12 @@ function absoluteUrl(maybePath) {
 }
 
 function plausibleSnippet() {
-  if (!PLAUSIBLE_DOMAIN) return "";
-  return `<script defer data-domain="${escapeHtml(PLAUSIBLE_DOMAIN)}" src="https://plausible.io/js/script.js"></script>`;
+  // Always embed Bryan's site-specific Plausible snippet (no PLAUSIBLE_DOMAIN gate).
+  return `<!-- Privacy-friendly analytics by Plausible -->
+<script async src="https://plausible.io/js/pa-u2wku-FtmEZ8HgtGfIyie.js"></script>
+<script>
+${PLAUSIBLE_INLINE}
+</script>`;
 }
 
 function renderWritingPage(post) {
@@ -213,7 +224,7 @@ app.get("/api/health", (_req, res) => {
 app.get("/api/site-config", (_req, res) => {
   res.json({
     siteUrl: SITE_URL,
-    plausibleDomain: PLAUSIBLE_DOMAIN || null
+    analytics: "plausible"
   });
 });
 
@@ -290,10 +301,10 @@ app.get("/writings/:slug", (req, res) => {
   }
 });
 
-// Homepage with optional Plausible injection
+// Homepage with always-on Plausible injection
 app.get(["/", "/index.html"], (_req, res) => {
   let html = fs.readFileSync(path.join(PUBLIC_DIR, "index.html"), "utf8");
-  if (PLAUSIBLE_DOMAIN && !html.includes("plausible.io/js/script.js")) {
+  if (!html.includes("plausible.io/js/pa-u2wku-FtmEZ8HgtGfIyie.js")) {
     html = html.replace(
       "</head>",
       `  ${plausibleSnippet()}\n</head>`
