@@ -3,6 +3,7 @@ title: "Qwen3-Coder Locally: The Context Window Math That Actually Matters"
 date: "2026-09-12"
 excerpt: "Running Qwen3-Coder on a 16 GB GPU is less about the model card and more about one calculation: weights + KV cache + headroom. Here’s how to size context without kneecapping yourself."
 tags: "Local AI, LLMs, Qwen3-Coder, Ollama, VRAM, Developer Tools"
+cover: "/local-llm-context-window-budget.png"
 ---
 
 Local models feel free until the GPU starts swapping layers to system RAM. Then you’re not “running AI on your PC”—you’re running a partial model on a graphics card and the rest on a CPU that never asked for the job.
