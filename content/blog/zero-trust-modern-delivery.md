@@ -3,7 +3,7 @@ title: "Zero Trust Thinking for Modern Delivery"
 date: "2026-09-01"
 excerpt: "A practical framework for integrating zero trust principles into delivery pipelines."
 tags: "Security, DevSecOps, Cloud"
-cover: "/covers/zero-trust.svg"
+cover: "/covers/zero-trust.png"
 ---
 
 Zero trust is not a product; it's an operating model. The most effective teams embed identity, policy, and telemetry into every deployment gate.
