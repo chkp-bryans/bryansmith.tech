@@ -6,11 +6,11 @@ tags: "HTTP, APIs, Security, WAF, Digital Workers"
 cover: "/covers/http-query.svg"
 ---
 
-HTTP just got its first new standard method since PATCH in 2010: **QUERY** ([RFC 10008](https://www.rfc-editor.org/rfc/rfc10008.html), June 2026).
+HTTP just got a new **IANA-registered general-purpose method on the standards track** — the first since PATCH in 2010: **QUERY** ([RFC 10008](https://www.rfc-editor.org/rfc/rfc10008.html), June 2026, Proposed Standard). Older WebDAV methods (SEARCH, PROPFIND, REPORT) were already safe and idempotent with a body; QUERY was chosen as the general-purpose name instead of extending those.
 
 For years we faked “read with a body.” The workarounds work until they don’t — caches, retries, and intermediaries all get the wrong idea about what the request means.
 
-**QUERY is the missing middle.** Safe and idempotent like GET. Request body carries the query like POST. Servers can advertise formats with `Accept-Query`. Responses can be cached with a key that includes the request content (when implementations catch up).
+**QUERY is the missing middle.** Safe and idempotent like GET. Request body carries the query like POST. `Accept-Query` is the discovery header for which query media types the server accepts. Caching is specified in the RFC — the cache key must incorporate the request body — but shared caches, CDNs, and browsers will trail clients and servers while that lands.
 
 ### How we used to fake it
 
@@ -43,7 +43,7 @@ Accept-Query: application/json
 { "status": "open", "tags": ["vip", "retry"], "range": { "from": "2024-01-01", "to": "2026-09-01" } }
 ```
 
-Same body as the POST hack, GET-like safety: safe, idempotent, retryable, and (when stacks catch up) cacheable using the request content as part of the cache key.
+Same body as the POST hack, GET-like safety: safe, idempotent, retryable, and cacheable per the RFC once implementations key on the request content (shared caches and CDNs will lag).
 
 ## Why security and edge folks should care
 
