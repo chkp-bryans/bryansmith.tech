@@ -23,17 +23,25 @@ function projectCard(repo) {
   `;
 }
 
-function blogCard(post) {
+function blogCard(post, index) {
   const tags = (post.tags || []).map((t) => `<span class="badge">${t}</span>`).join("");
+  const cover = post.cover
+    ? `<div class="card-cover"><img src="${post.cover}" alt="" loading="lazy" decoding="async"></div>`
+    : `<div class="card-cover card-cover-fallback" aria-hidden="true"></div>`;
+  const latest = index === 0 ? `<span class="badge latest-badge">Latest</span>` : "";
   return `
-    <article class="card">
-      <h3><a href="/api/blog/${encodeURIComponent(post.slug)}" data-article-slug="${encodeURIComponent(post.slug)}">${post.title}</a></h3>
-      <p>${post.excerpt}</p>
-      <div class="card-meta">
-        <span class="badge">${post.date || "Undated"}</span>
-        <span class="badge">${estimateReadTime(post.excerpt)}</span>
+    <article class="card writing-card${index === 0 ? " writing-card-latest" : ""}">
+      ${cover}
+      <div class="card-body">
+        <h3><a href="/api/blog/${encodeURIComponent(post.slug)}" data-article-slug="${encodeURIComponent(post.slug)}">${post.title}</a></h3>
+        <p>${post.excerpt}</p>
+        <div class="card-meta">
+          ${latest}
+          <span class="badge">${post.date || "Undated"}</span>
+          <span class="badge">${estimateReadTime(post.excerpt)}</span>
+        </div>
+        <p class="card-meta">${tags}</p>
       </div>
-      <p class="card-meta">${tags}</p>
     </article>
   `;
 }
@@ -99,7 +107,7 @@ async function loadBlog() {
   try {
     const data = await getJSON("/api/blog");
     target.classList.remove("loading");
-    target.innerHTML = data.posts.map(blogCard).join("");
+    target.innerHTML = data.posts.map((post, index) => blogCard(post, index)).join("");
   } catch (_err) {
     target.classList.remove("loading");
     target.innerHTML = `<article class="card"><p>Unable to load writings right now.</p></article>`;

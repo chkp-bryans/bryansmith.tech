@@ -3,6 +3,7 @@ title: "HTTP Response Codes, Explained Like You Actually Use Them"
 date: "2026-09-09"
 excerpt: "A practical map of HTTP status codes—families, WAF/edge quirks, performance, and how AI agents waste tokens when they ignore them."
 tags: "HTTP, WAF, Security, APIs, Digital Workers"
+cover: "/http-status-codes-cheatsheet.png"
 ---
 
 Every request gets a three-digit answer. That number tells you whether to celebrate, fix your call, wait, or page someone. Learn the families once; the rest is pattern matching.

@@ -3,6 +3,7 @@ title: "Grocery AI won’t need a patent to change how you shop — it’ll need
 date: "2026-09-20"
 excerpt: "Walmart patents and electronic shelf labels sparked surge-pricing panic. Patents aren’t products — here’s where grocery AI actually helps shoppers, where it hurts, and how to tell the difference."
 tags: "AI, Retail, Pricing, Consumer Trust, Grocery"
+cover: "/covers/grocery-ai.svg"
 ---
 
 The internet discovered that Walmart holds patents describing dynamic prices — including the idea that a scan-and-go cart with tuna in it might see a different mayonnaise price. Other chains show up in the same neighborhood: Amazon’s sensor-cart charge logic, Safeway-era loyalty discount patents, Kroger’s electronic shelf label rollout, Whole Foods’ digital tags. Cue the fear that the aisle is about to surge-price ice cream on hot days and charge you more because the model thinks you’ll pay it.

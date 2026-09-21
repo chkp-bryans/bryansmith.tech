@@ -58,6 +58,7 @@ function getBlogPosts() {
       date: meta.date || "",
       excerpt: meta.excerpt || body.slice(0, 160),
       tags: meta.tags ? meta.tags.split(",").map((t) => t.trim()) : [],
+      cover: meta.cover || "",
       html: marked.parse(body)
     };
   });
@@ -128,7 +129,8 @@ app.get("/api/blog", (_req, res) => {
       title: post.title,
       date: post.date,
       excerpt: post.excerpt,
-      tags: post.tags
+      tags: post.tags,
+      cover: post.cover
     }));
     res.json({ posts });
   } catch (err) {

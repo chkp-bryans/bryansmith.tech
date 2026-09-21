@@ -535,3 +535,96 @@ button:focus-visible {
     transform: none;
   }
 }
+
+/* Featured Writings */
+.writings-featured {
+  margin-top: 10px;
+  padding: 28px 22px 26px;
+  border: 1px solid rgba(108, 178, 255, 0.28);
+  border-radius: 18px;
+  background:
+    radial-gradient(circle at top right, rgba(137, 240, 209, 0.12), transparent 42%),
+    linear-gradient(180deg, rgba(18, 31, 56, 0.92), rgba(13, 25, 48, 0.72));
+  box-shadow: var(--shadow);
+}
+
+.writings-header {
+  max-width: 62ch;
+}
+
+.writings-intro {
+  margin: 8px 0 0;
+  color: var(--muted);
+}
+
+.writings-grid {
+  margin-top: 18px;
+}
+
+.writing-card {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.writing-card .card-body {
+  padding: 16px 18px 18px;
+}
+
+.card-cover {
+  aspect-ratio: 16 / 9;
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--border);
+  overflow: hidden;
+}
+
+.card-cover img {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.card-cover-fallback {
+  background:
+    linear-gradient(135deg, rgba(108, 178, 255, 0.28), transparent 55%),
+    linear-gradient(225deg, rgba(137, 240, 209, 0.18), transparent 50%),
+    var(--surface-2);
+}
+
+.writing-card-latest {
+  border-color: rgba(137, 240, 209, 0.45);
+}
+
+.latest-badge {
+  color: #081427;
+  background: linear-gradient(120deg, var(--accent-2), var(--accent));
+  border-color: transparent;
+}
+
+@media (min-width: 900px) {
+  .writings-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .writing-card-latest {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.2fr);
+    align-items: stretch;
+  }
+
+  .writing-card-latest .card-cover {
+    aspect-ratio: auto;
+    min-height: 100%;
+    border-bottom: 0;
+    border-right: 1px solid var(--border);
+  }
+}
+
+@media (max-width: 640px) {
+  .writings-featured {
+    padding: 20px 14px 18px;
+  }
+}
