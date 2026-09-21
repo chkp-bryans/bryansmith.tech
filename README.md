@@ -41,6 +41,8 @@ Current production is a **single Node/Express `app` container** on Dokploy (`dok
 - `GET /api/showcase`
 - `GET /api/blog`
 - `GET /api/blog/:slug`
+- `GET /writings/:slug` (shareable writing page + Open Graph)
+- `GET /api/site-config` (Plausible domain when configured)
 
 ## Content Updates
 
@@ -79,3 +81,10 @@ The app image is `node:20-alpine`. Alpine does **not** ship `wget` by default. T
 - Static assets served via Express with cache headers
 - TLS and edge routing handled by Dokploy ingress
 - Frontend fetches content asynchronously
+
+
+## Analytics (Plausible)
+
+Set `PLAUSIBLE_DOMAIN=bryansmith.tech` (and optionally `SITE_URL`) in the environment.
+If `PLAUSIBLE_DOMAIN` is empty, no script is injected. After deploy, create the site in the Plausible dashboard and point Dokploy env at that domain.
+Helmet CSP allows `https://plausible.io` for script and connect.

@@ -127,3 +127,12 @@ The runtime image is `node:20-alpine`, which typically has **no `wget`**. Compos
 - [x] Secrets/env externalized in Dokploy (`GITHUB_TOKEN` optional)
 - [x] nginx / Nano documented as optional future only
 - [ ] (Follow-up) Alpine-safe healthcheck if `wget` causes false unhealthy
+
+
+## Plausible + shareable writings
+
+1. Create `bryansmith.tech` in Plausible.
+2. On Dokploy, set:
+   - `PLAUSIBLE_DOMAIN=bryansmith.tech`
+   - `SITE_URL=https://bryansmith.tech`
+3. Redeploy. Writings are shareable at `/writings/<slug>` (example: `/writings/nfl-ai-sideline-who-trusts-it`).

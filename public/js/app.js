@@ -33,7 +33,7 @@ function blogCard(post, index) {
     <article class="card writing-card${index === 0 ? " writing-card-latest" : ""}">
       ${cover}
       <div class="card-body">
-        <h3><a href="/api/blog/${encodeURIComponent(post.slug)}" data-article-slug="${encodeURIComponent(post.slug)}">${post.title}</a></h3>
+        <h3><a href="/writings/${encodeURIComponent(post.slug)}">${post.title}</a></h3>
         <p>${post.excerpt}</p>
         <div class="card-meta">
           ${latest}
@@ -65,14 +65,9 @@ async function openArticle(slug) {
 
 function initArticleDialog() {
   const dialog = document.getElementById("article-dialog");
+  if (!dialog) return;
   const close = dialog.querySelector(".dialog-close");
-  document.getElementById("blog-grid").addEventListener("click", (event) => {
-    const link = event.target.closest("[data-article-slug]");
-    if (!link) return;
-    event.preventDefault();
-    openArticle(decodeURIComponent(link.dataset.articleSlug));
-  });
-  close.addEventListener("click", () => dialog.close());
+  if (close) close.addEventListener("click", () => dialog.close());
   dialog.addEventListener("click", (event) => {
     if (event.target === dialog) dialog.close();
   });
@@ -108,6 +103,15 @@ async function loadBlog() {
     const data = await getJSON("/api/blog");
     target.classList.remove("loading");
     target.innerHTML = data.posts.map((post, index) => blogCard(post, index)).join("");
+    target.querySelectorAll(".writing-card").forEach((card) => {
+      const link = card.querySelector("h3 a");
+      if (!link) return;
+      card.style.cursor = "pointer";
+      card.addEventListener("click", (event) => {
+        if (event.target.closest("a")) return;
+        window.location.href = link.href;
+      });
+    });
   } catch (_err) {
     target.classList.remove("loading");
     target.innerHTML = `<article class="card"><p>Unable to load writings right now.</p></article>`;
