@@ -41,6 +41,8 @@ Current production is a **single Node/Express `app` container** on Dokploy (`dok
 - `GET /api/showcase`
 - `GET /api/blog`
 - `GET /api/blog/:slug`
+- `GET /writings/:slug` (shareable writing page + Open Graph)
+- `GET /api/site-config` (site URL + analytics marker)
 
 ## Content Updates
 
@@ -79,3 +81,10 @@ The app image is `node:20-alpine`. Alpine does **not** ship `wget` by default. T
 - Static assets served via Express with cache headers
 - TLS and edge routing handled by Dokploy ingress
 - Frontend fetches content asynchronously
+
+
+## Analytics (Plausible)
+
+The site-specific Plausible snippet is always embedded in `<head>` on the homepage and writing pages (hashed `pa-*.js` + `plausible.init()`).
+`PLAUSIBLE_DOMAIN` is not required. Optionally set `SITE_URL` for Open Graph absolute URLs.
+Helmet CSP allows `https://plausible.io` for `script-src` and `connect-src`, plus a `sha256-` hash of the inline init script (no `'unsafe-inline'` for scripts).

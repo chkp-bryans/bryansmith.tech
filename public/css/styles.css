@@ -628,3 +628,76 @@ button:focus-visible {
     padding: 20px 14px 18px;
   }
 }
+
+/* Shareable writing pages */
+.writing-page .writing-main {
+  padding: 28px 0 48px;
+  max-width: 760px;
+}
+
+.writing-back {
+  margin: 0 0 18px;
+}
+
+.writing-back a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.writing-back a:hover {
+  text-decoration: underline;
+}
+
+.writing-article h1 {
+  margin: 0 0 12px;
+  line-height: 1.2;
+  font-size: clamp(1.6rem, 4vw, 2.35rem);
+}
+
+.writing-meta {
+  margin-bottom: 18px;
+}
+
+.writing-cover {
+  display: block;
+  width: 100%;
+  max-height: 360px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  margin: 0 0 22px;
+}
+
+.writing-body {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.writing-body h2,
+.writing-body h3 {
+  color: var(--text);
+  margin-top: 1.6em;
+}
+
+.writing-body a {
+  color: var(--accent);
+}
+
+.writing-body img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+}
+
+.writing-body pre,
+.writing-body code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.writing-body pre {
+  overflow-x: auto;
+  padding: 12px 14px;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--surface-2);
+}
