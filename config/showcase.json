@@ -1,28 +1,34 @@
 {
   "repos": [
     {
+      "repo": "chkp-bryans/terraform-azure-vwan-checkpoint",
+      "description": "Deploy Azure Virtual WAN, Hub, & CP NVAs all-in-one",
+      "stars": 0,
+      "highlight": "Azure + Check Point"
+    },
+    {
       "repo": "chkp-bryans/web-detective",
       "description": "A Python toolkit for investigating web behavior and security signals.",
       "stars": 0,
       "highlight": "Security tooling"
     },
     {
-      "repo": "chkp-bryans/terraform-azure-vwan-checkpoint",
-      "description": "Terraform deployment for Azure Virtual WAN, hubs, and Check Point NVAs.",
+      "repo": "chkp-bryans/Check_Point_Hardening_App",
+      "description": "Hardening scan/evidence/remediation for Check Point gateways and management",
       "stars": 0,
-      "highlight": "Azure infrastructure"
+      "highlight": "Check Point hardening"
     },
     {
-      "repo": "chkp-bryans/shiftleft-cicd-demo",
-      "description": "A practical CI/CD security demonstration for shifting controls left.",
+      "repo": "chkp-bryans/CloudGuardIaaS",
+      "description": "CloudGuard Network Security templates, Terraform, tools",
       "stars": 0,
-      "highlight": "DevSecOps"
+      "highlight": "CloudGuard IaaS"
     },
     {
-      "repo": "chkp-bryans/search-th-extension",
-      "description": "Chrome extension for searching selected text in Check Point Threat Hunting.",
+      "repo": "chkp-bryans/CME-scripts",
+      "description": "Custom gateway scripts for Check Point Cloud Management Extension (CME).",
       "stars": 0,
-      "highlight": "Browser extension"
+      "highlight": "CME automation"
     }
   ]
 }
