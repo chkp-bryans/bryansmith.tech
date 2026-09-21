@@ -13,7 +13,7 @@ Runbook for deploying **bryansmith.tech** as it runs **live today**: a single No
    - `docker-compose.yml` (app-only service)
 2. Confirm secrets/env:
    - `GITHUB_TOKEN` — **optional** (recommended for GitHub API rate limits)
-   - `GOATCOUNTER_CODE` — **optional** (GoatCounter subdomain code; omit to disable analytics)
+   - `GOATCOUNTER_CODE` — **optional** (production: `psuimpreza`; omit to disable analytics)
    - `SITE_URL` — **optional** (Open Graph absolute URLs)
    - `NANO_*` — **not required** for the current stack
 3. DNS for `bryansmith.tech` should point to the Dokploy host.
@@ -133,8 +133,8 @@ The runtime image is `node:20-alpine`, which typically has **no `wget`**. Compos
 
 ## GoatCounter + shareable writings
 
-1. Create (or use) a GoatCounter site and note the subdomain code (e.g. `mysite` for `mysite.goatcounter.com`).
+1. GoatCounter site for bryansmith.tech is **psuimpreza** (`https://psuimpreza.goatcounter.com`).
 2. On Dokploy, set:
-   - `GOATCOUNTER_CODE=<subdomain-code>` (required for analytics; omit to disable)
+   - `GOATCOUNTER_CODE=psuimpreza` (production code; omit to disable analytics)
    - `SITE_URL=https://bryansmith.tech` (optional; Open Graph absolute URLs)
 3. Redeploy. Writings remain shareable at `/writings/<slug>` (example: `/writings/nfl-ai-sideline-who-trusts-it`).

@@ -58,7 +58,7 @@ Current production is a **single Node/Express `app` container** on Dokploy (`dok
 3. Compose file: `docker-compose.yml` (single `app` service).
 4. Set environment in Dokploy:
    - `GITHUB_TOKEN` (optional, recommended for GitHub API limits)
-   - `GOATCOUNTER_CODE` (optional; GoatCounter subdomain code for analytics)
+   - `GOATCOUNTER_CODE` (optional; production: `psuimpreza`)
    - `SITE_URL` (optional; Open Graph absolute URLs, defaults to https://bryansmith.tech)
    - `NODE_ENV=production` (optional; compose defaults)
    - `PORT=3000` (optional; compose defaults)
@@ -87,12 +87,13 @@ The app image is `node:20-alpine`. Alpine does **not** ship `wget` by default. T
 
 ## Analytics (GoatCounter)
 
-Set `GOATCOUNTER_CODE` to your GoatCounter subdomain code (e.g. `mysite` for `https://mysite.goatcounter.com`). When set, the site embeds the standard GoatCounter snippet on the homepage, writing pages, and 404:
+Set `GOATCOUNTER_CODE` to the GoatCounter subdomain code. Production value is **`psuimpreza`** (`https://psuimpreza.goatcounter.com`). When set, the site embeds the standard GoatCounter snippet on the homepage, writing pages, and 404:
 
 ```html
-<script data-goatcounter="https://CODE.goatcounter.com/count"
+<script data-goatcounter="https://psuimpreza.goatcounter.com/count"
         async src="https://gc.zgo.at/count.js"></script>
 ```
+(`CODE` comes from `GOATCOUNTER_CODE`; production uses `psuimpreza`.)
 
 If `GOATCOUNTER_CODE` is unset, no analytics script is injected. Optionally set `SITE_URL` for Open Graph absolute URLs.
 
