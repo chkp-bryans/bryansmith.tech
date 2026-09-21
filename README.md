@@ -58,6 +58,8 @@ Current production is a **single Node/Express `app` container** on Dokploy (`dok
 3. Compose file: `docker-compose.yml` (single `app` service).
 4. Set environment in Dokploy:
    - `GITHUB_TOKEN` (optional, recommended for GitHub API limits)
+   - `GOATCOUNTER_CODE` (optional; production: `psuimpreza`)
+   - `SITE_URL` (optional; Open Graph absolute URLs, defaults to https://bryansmith.tech)
    - `NODE_ENV=production` (optional; compose defaults)
    - `PORT=3000` (optional; compose defaults)
 5. Map domain `bryansmith.tech` and enable TLS at **Dokploy ingress** → container port **3000**.
@@ -83,8 +85,16 @@ The app image is `node:20-alpine`. Alpine does **not** ship `wget` by default. T
 - Frontend fetches content asynchronously
 
 
-## Analytics (Plausible)
+## Analytics (GoatCounter)
 
-The site-specific Plausible snippet is always embedded in `<head>` on the homepage and writing pages (hashed `pa-*.js` + `plausible.init()`).
-`PLAUSIBLE_DOMAIN` is not required. Optionally set `SITE_URL` for Open Graph absolute URLs.
-Helmet CSP allows `https://plausible.io` for `script-src` and `connect-src`, plus a `sha256-` hash of the inline init script (no `'unsafe-inline'` for scripts).
+Set `GOATCOUNTER_CODE` to the GoatCounter subdomain code. Production value is **`psuimpreza`** (`https://psuimpreza.goatcounter.com`). When set, the site embeds the standard GoatCounter snippet on the homepage, writing pages, and 404:
+
+```html
+<script data-goatcounter="https://psuimpreza.goatcounter.com/count"
+        async src="https://gc.zgo.at/count.js"></script>
+```
+(`CODE` comes from `GOATCOUNTER_CODE`; production uses `psuimpreza`.)
+
+If `GOATCOUNTER_CODE` is unset, no analytics script is injected. Optionally set `SITE_URL` for Open Graph absolute URLs.
+
+Helmet CSP allows `https://gc.zgo.at` for `script-src`, and `https://*.goatcounter.com` / `https://gc.zgo.at` for `connect-src` (and GoatCounter img beacons via `img-src`).
