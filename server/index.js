@@ -21,10 +21,14 @@ app.use(
       useDefaults: true,
       directives: {
         // GoatCounter: count.js from gc.zgo.at; beacons to *.goatcounter.com
-        "script-src": ["'self'", "https://gc.zgo.at"],
-        "connect-src": ["'self'", "https://*.goatcounter.com", "https://gc.zgo.at"],
+        // Mermaid CDN for interactive diagrams in writings (click handlers need loose securityLevel in mermaid-boot.js)
+        "script-src": ["'self'", "https://gc.zgo.at", "https://cdn.jsdelivr.net"],
+        "connect-src": ["'self'", "https://*.goatcounter.com", "https://gc.zgo.at", "https://cdn.jsdelivr.net"],
         "img-src": ["'self'", "data:", "https:", "https://*.goatcounter.com"],
-        "style-src": ["'self'", "https:", "'unsafe-inline'"]
+        "style-src": ["'self'", "https:", "'unsafe-inline'"],
+        // Mermaid may use workers/blobs when rendering
+        "worker-src": ["'self'", "blob:"],
+        "child-src": ["'self'", "blob:"]
       }
     }
   })
@@ -247,6 +251,8 @@ ${ogImageMetaTags(post.cover, image)}
   <footer class="container footer">
     <small>&copy; ${new Date().getFullYear()} bryansmith.tech</small>
   </footer>
+  <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
+  <script src="/js/mermaid-boot.js"></script>
 </body>
 </html>`;
 }
