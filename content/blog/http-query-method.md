@@ -3,7 +3,7 @@ title: "HTTP got a new method: QUERY"
 date: "2026-09-21"
 excerpt: "RFC 10008 adds QUERY — safe and idempotent like GET, with a body like POST. Why it matters for APIs, caches, and WAFs."
 tags: "HTTP, APIs, Security, WAF, Digital Workers"
-cover: "/covers/http-query.svg"
+cover: "/covers/http-query.png"
 ---
 
 HTTP just got a new **IANA-registered general-purpose method on the standards track** — the first since PATCH in 2010: **QUERY** ([RFC 10008](https://www.rfc-editor.org/rfc/rfc10008.html), June 2026, Proposed Standard). Older WebDAV methods (SEARCH, PROPFIND, REPORT) were already safe and idempotent with a body; QUERY was chosen as the general-purpose name instead of extending those.
