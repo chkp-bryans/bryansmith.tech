@@ -536,6 +536,60 @@ button:focus-visible {
   }
 }
 
+
+.writings-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.tag-chip {
+  appearance: none;
+  border: 1px solid var(--border);
+  color: #d8e7ff;
+  background: rgba(108, 178, 255, 0.1);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font: inherit;
+  font-size: 0.82rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.tag-chip:hover {
+  border-color: rgba(108, 178, 255, 0.55);
+  background: rgba(108, 178, 255, 0.18);
+}
+
+.tag-chip.is-active {
+  color: #081427;
+  background: linear-gradient(120deg, var(--accent-2), var(--accent));
+  border-color: transparent;
+}
+
+.tag-chip:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.writing-tag {
+  cursor: pointer;
+  font: inherit;
+}
+
+.writing-tag:hover {
+  border-color: rgba(108, 178, 255, 0.55);
+  background: rgba(108, 178, 255, 0.22);
+}
+
+.writings-empty {
+  margin: 18px 0 0;
+  color: var(--muted);
+  grid-column: 1 / -1;
+}
+
 /* Featured Writings */
 .writings-featured {
   margin-top: 10px;
@@ -593,11 +647,11 @@ button:focus-visible {
     var(--surface-2);
 }
 
-.writing-card-latest {
+.writing-card-featured {
   border-color: rgba(137, 240, 209, 0.45);
 }
 
-.latest-badge {
+.featured-badge {
   color: #081427;
   background: linear-gradient(120deg, var(--accent-2), var(--accent));
   border-color: transparent;
@@ -608,14 +662,14 @@ button:focus-visible {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .writing-card-latest {
+  .writing-card-featured {
     grid-column: 1 / -1;
     display: grid;
     grid-template-columns: minmax(220px, 0.95fr) minmax(0, 1.2fr);
     align-items: stretch;
   }
 
-  .writing-card-latest .card-cover {
+  .writing-card-featured .card-cover {
     aspect-ratio: auto;
     min-height: 100%;
     border-bottom: 0;

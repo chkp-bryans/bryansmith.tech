@@ -23,20 +23,60 @@ function projectCard(repo) {
   `;
 }
 
-function blogCard(post, index) {
-  const tags = (post.tags || []).map((t) => `<span class="badge">${t}</span>`).join("");
+let blogPosts = [];
+let activeTag = "";
+
+function getTagFromUrl() {
+  try {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("tag") || "";
+  } catch (_err) {
+    return "";
+  }
+}
+
+function setTagInUrl(tag) {
+  try {
+    const url = new URL(window.location.href);
+    if (tag) url.searchParams.set("tag", tag);
+    else url.searchParams.delete("tag");
+    history.replaceState(null, "", `${url.pathname}${url.search}${url.hash}`);
+  } catch (_err) {
+    // ignore URL update failures
+  }
+}
+
+function collectUniqueTags(posts) {
+  const tags = new Set();
+  posts.forEach((post) => {
+    (post.tags || []).forEach((tag) => {
+      if (tag) tags.add(tag);
+    });
+  });
+  return Array.from(tags).sort((a, b) => a.localeCompare(b));
+}
+
+function postMatchesTag(post, tag) {
+  if (!tag) return true;
+  return (post.tags || []).includes(tag);
+}
+
+function blogCard(post, { featured = false } = {}) {
+  const tags = (post.tags || [])
+    .map((t) => `<button type="button" class="badge writing-tag" data-tag="${t.replace(/"/g, "&quot;")}">${t}</button>`)
+    .join("");
   const cover = post.cover
     ? `<div class="card-cover"><img src="${post.cover}" alt="" loading="lazy" decoding="async"></div>`
     : `<div class="card-cover card-cover-fallback" aria-hidden="true"></div>`;
-  const latest = index === 0 ? `<span class="badge latest-badge">Latest</span>` : "";
+  const featuredBadge = featured ? `<span class="badge featured-badge">Featured</span>` : "";
   return `
-    <article class="card writing-card${index === 0 ? " writing-card-latest" : ""}">
+    <article class="card writing-card${featured ? " writing-card-featured" : ""}">
       ${cover}
       <div class="card-body">
         <h3><a href="/writings/${encodeURIComponent(post.slug)}">${post.title}</a></h3>
         <p>${post.excerpt}</p>
         <div class="card-meta">
-          ${latest}
+          ${featuredBadge}
           <span class="badge">${post.date || "Undated"}</span>
           <span class="badge">${estimateReadTime(post.excerpt)}</span>
         </div>
@@ -44,6 +84,78 @@ function blogCard(post, index) {
       </div>
     </article>
   `;
+}
+
+function renderTagChips(tags) {
+  const container = document.getElementById("writings-tags");
+  if (!container) return;
+  const chips = [
+    { label: "All", value: "" },
+    ...tags.map((tag) => ({ label: tag, value: tag })),
+  ];
+  container.innerHTML = chips
+    .map((chip) => {
+      const isActive = chip.value === activeTag;
+      return `<button type="button" class="tag-chip${isActive ? " is-active" : ""}" data-tag="${chip.value.replace(/"/g, "&quot;")}" aria-pressed="${isActive ? "true" : "false"}">${chip.label}</button>`;
+    })
+    .join("");
+  container.querySelectorAll(".tag-chip").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      setActiveTag(btn.getAttribute("data-tag") || "");
+    });
+  });
+}
+
+function wireWritingCards(target) {
+  target.querySelectorAll(".writing-card").forEach((card) => {
+    const link = card.querySelector("h3 a");
+    if (!link) return;
+    card.style.cursor = "pointer";
+    card.addEventListener("click", (event) => {
+      if (event.target.closest("a") || event.target.closest(".writing-tag")) return;
+      window.location.href = link.href;
+    });
+  });
+  target.querySelectorAll(".writing-tag").forEach((btn) => {
+    btn.addEventListener("click", (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      setActiveTag(btn.getAttribute("data-tag") || "");
+    });
+  });
+}
+
+function renderBlogGrid() {
+  const target = document.getElementById("blog-grid");
+  if (!target) return;
+
+  if (!blogPosts.length) {
+    target.innerHTML = `<article class="card"><p>No writings yet.</p></article>`;
+    return;
+  }
+
+  const featured = blogPosts[0];
+  const rest = blogPosts.slice(1);
+  const showFeatured = postMatchesTag(featured, activeTag);
+  const filteredRest = rest.filter((post) => postMatchesTag(post, activeTag));
+
+  if (!showFeatured && filteredRest.length === 0) {
+    target.innerHTML = `<p class="writings-empty">No writings with that tag.</p>`;
+    return;
+  }
+
+  const cards = [];
+  if (showFeatured) cards.push(blogCard(featured, { featured: true }));
+  filteredRest.forEach((post) => cards.push(blogCard(post)));
+  target.innerHTML = cards.join("");
+  wireWritingCards(target);
+}
+
+function setActiveTag(tag) {
+  activeTag = tag || "";
+  setTagInUrl(activeTag);
+  renderTagChips(collectUniqueTags(blogPosts));
+  renderBlogGrid();
 }
 
 async function openArticle(slug) {
@@ -98,20 +210,20 @@ async function loadProjects() {
 
 async function loadBlog() {
   const target = document.getElementById("blog-grid");
+  if (!target) return;
   renderLoading(target, 3);
   try {
     const data = await getJSON("/api/blog");
     target.classList.remove("loading");
-    target.innerHTML = data.posts.map((post, index) => blogCard(post, index)).join("");
-    target.querySelectorAll(".writing-card").forEach((card) => {
-      const link = card.querySelector("h3 a");
-      if (!link) return;
-      card.style.cursor = "pointer";
-      card.addEventListener("click", (event) => {
-        if (event.target.closest("a")) return;
-        window.location.href = link.href;
-      });
-    });
+    blogPosts = data.posts || [];
+    activeTag = getTagFromUrl();
+    const knownTags = collectUniqueTags(blogPosts);
+    if (activeTag && !knownTags.includes(activeTag)) {
+      activeTag = "";
+      setTagInUrl("");
+    }
+    renderTagChips(knownTags);
+    renderBlogGrid();
   } catch (_err) {
     target.classList.remove("loading");
     target.innerHTML = `<article class="card"><p>Unable to load writings right now.</p></article>`;
