@@ -3,7 +3,7 @@ title: "Designing Resilient Cloud Platforms"
 date: "2026-08-20"
 excerpt: "How to combine architecture guardrails and operational excellence for resilience."
 tags: "Architecture, Reliability, Cloud"
-cover: "/covers/cloud-platforms.svg"
+cover: "/covers/cloud-platforms.png"
 ---
 
 Resilience comes from layered decisions: sane defaults, resilient infrastructure, and rapid operational feedback loops.

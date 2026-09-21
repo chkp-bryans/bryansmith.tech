@@ -3,7 +3,7 @@ title: "Musing #1"
 date: "2026-09-04"
 excerpt: "Thoughts of the day..."
 tags: "Musing, AI, Cloud"
-cover: "/covers/musings.svg"
+cover: "/covers/musings.png"
 ---
 
 Good afternoon! It’s 11:11 AM here on September 4th. These are notes from the brink of a problem. The kids had a half-day.👎

@@ -3,7 +3,7 @@ title: "The NFL already has AI on the sideline. The interesting part is who trus
 date: "2026-09-20"
 excerpt: "Sideline tablets were the visible tech. The real shift is natural-language queries over live game data — and the same trust gap that shows up in security and ops."
 tags: "AI, NFL, Sports, Security, Ops"
-cover: "/covers/nfl-ai.svg"
+cover: "/covers/nfl-ai.png"
 ---
 
 For years the visible tech was a rugged tablet — still frames between series, the thing fans notice when a coach “looks at the iPad.” That hardware is still there. What changed is the layer on top: natural-language queries over live game data, play filters on sideline devices, and scouting assistants that answer in English while a prospect is still walking through drills. The new product is not a prettier screen. It is latency.

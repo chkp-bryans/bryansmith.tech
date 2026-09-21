@@ -15,6 +15,8 @@ const GOATCOUNTER_CODE = (process.env.GOATCOUNTER_CODE || "").trim();
 
 app.use(
   helmet({
+    // Allow LinkedIn/other crawlers to load og:image (default same-origin blocks them).
+    crossOriginResourcePolicy: { policy: "cross-origin" },
     contentSecurityPolicy: {
       useDefaults: true,
       directives: {
@@ -104,6 +106,82 @@ function goatCounterSnippet() {
         async src="https://gc.zgo.at/count.js"></script>`;
 }
 
+
+function publishedTimeIso(dateStr) {
+  // Frontmatter dates are YYYY-MM-DD. LinkedIn wants ISO8601; use noon UTC
+  // so the calendar day is stable across US timezones.
+  // Approach: `${YYYY-MM-DD}T12:00:00.000Z`
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return "";
+  return `${dateStr}T12:00:00.000Z`;
+}
+
+function imageExt(coverPath) {
+  const clean = String(coverPath || "").split("?")[0].split("#")[0];
+  const m = clean.match(/\.([a-z0-9]+)$/i);
+  return m ? m[1].toLowerCase() : "";
+}
+
+function mimeFromExt(ext) {
+  if (ext === "png") return "image/png";
+  if (ext === "jpg" || ext === "jpeg") return "image/jpeg";
+  if (ext === "webp") return "image/webp";
+  if (ext === "gif") return "image/gif";
+  if (ext === "svg") return "image/svg+xml";
+  return "";
+}
+
+function readRasterDimensions(coverPath) {
+  if (!coverPath) return null;
+  const rel = coverPath.startsWith("/") ? coverPath.slice(1) : coverPath;
+  const filePath = path.join(PUBLIC_DIR, rel);
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    const buf = fs.readFileSync(filePath);
+    // PNG IHDR
+    if (buf.length >= 24 && buf[0] === 0x89 && buf[1] === 0x50 && buf[2] === 0x4e && buf[3] === 0x47) {
+      return { width: buf.readUInt32BE(16), height: buf.readUInt32BE(20) };
+    }
+    // JPEG SOF
+    if (buf.length > 4 && buf[0] === 0xff && buf[1] === 0xd8) {
+      let i = 2;
+      while (i + 9 < buf.length) {
+        if (buf[i] !== 0xff) {
+          i += 1;
+          continue;
+        }
+        const marker = buf[i + 1];
+        if (marker === 0xd8 || marker === 0xd9) {
+          i += 2;
+          continue;
+        }
+        const length = buf.readUInt16BE(i + 2);
+        if (marker >= 0xc0 && marker <= 0xc2 && length >= 7) {
+          return { width: buf.readUInt16BE(i + 7), height: buf.readUInt16BE(i + 5) };
+        }
+        i += 2 + length;
+      }
+    }
+  } catch (_) {
+    return null;
+  }
+  return null;
+}
+
+function ogImageMetaTags(coverPath, absoluteImageUrl) {
+  const ext = imageExt(coverPath || absoluteImageUrl);
+  const type = mimeFromExt(ext);
+  const lines = [];
+  if (type && type !== "image/svg+xml") {
+    lines.push(`  <meta property="og:image:type" content="${type}">`);
+    const dims = readRasterDimensions(coverPath);
+    if (dims && dims.width && dims.height) {
+      lines.push(`  <meta property="og:image:width" content="${dims.width}">`);
+      lines.push(`  <meta property="og:image:height" content="${dims.height}">`);
+    }
+  }
+  return lines.join("\n");
+}
+
 function renderWritingPage(post) {
   const url = `${SITE_URL}/writings/${encodeURIComponent(post.slug)}`;
   const image = absoluteUrl(post.cover || "/bs.jpg");
@@ -121,11 +199,15 @@ function renderWritingPage(post) {
   <title>${escapeHtml(post.title)} | Bryan Smith</title>
   <meta name="description" content="${escapeHtml(post.excerpt)}">
   <link rel="canonical" href="${escapeHtml(url)}">
+  <meta name="author" content="Bryan Smith">
+  <meta property="article:author" content="Bryan Smith">
+  ${post.date && /^\d{4}-\d{2}-\d{2}$/.test(post.date) ? `<meta property="article:published_time" content="${publishedTimeIso(post.date)}">` : ""}
   <meta property="og:type" content="article">
   <meta property="og:title" content="${escapeHtml(post.title)}">
   <meta property="og:description" content="${escapeHtml(post.excerpt)}">
   <meta property="og:url" content="${escapeHtml(url)}">
   <meta property="og:image" content="${escapeHtml(image)}">
+${ogImageMetaTags(post.cover, image)}
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="${escapeHtml(post.title)}">
   <meta name="twitter:description" content="${escapeHtml(post.excerpt)}">

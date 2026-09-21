@@ -3,7 +3,7 @@ title: "When the automation quits, someone still has to fly"
 date: "2026-09-18"
 excerpt: "Security Now pointed me at Richard Mitchell’s IEEE Spectrum essay on the automation paradox — and why deliberate practice still matters when AI is flying the plane."
 tags: "AI, Engineering, Automation, Skills, Safety"
-cover: "/covers/automation-fly.svg"
+cover: "/covers/automation-fly.png"
 ---
 
 Security Now pointed me at a recent IEEE Spectrum essay by Richard Mitchell, a systems engineer who’s spent decades on jet-engine and nuclear control software. The hook is uncomfortable if you live in AI-assisted work the way a lot of us do now: the more the machine handles day-to-day, the less practice humans get — until the machine hands the problem back on the worst possible day.
