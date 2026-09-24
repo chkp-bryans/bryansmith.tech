@@ -3,7 +3,7 @@ title: "GitHub URL tricks worth stealing"
 date: "2026-09-21"
 excerpt: "Change one word in a GitHub URL and the repo draws itself, feeds your AI, opens in the browser editor, or grows docs and agent tools. Five swaps I actually use."
 tags: "GitHub, Developer Tools, GitDiagram, Digital Workers"
-cover: "/covers/gitdiagram-cover.png"
+cover: "/covers/github-url-tricks.png"
 ---
 
 Notes from the edge of a problem.

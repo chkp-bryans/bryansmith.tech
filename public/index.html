@@ -45,7 +45,6 @@
       <aside class="linkedin-card" aria-label="LinkedIn profile highlight">
         <div class="portrait-frame">
           <img src="/bs.jpg" alt="Bryan Smith" width="720" height="720">
-          <span class="portrait-status">Open to teach digital workers</span>
         </div>
         <p class="eyebrow">Work with me</p>
         <h2>Let&rsquo;s connect on LinkedIn</h2>
@@ -63,8 +62,23 @@
       <div class="writings-header">
         <p class="eyebrow">Featured</p>
         <h2 id="writings-heading">Writings</h2>
-        <p class="writings-intro">Notes on digital workers, cloud security, and systems that hold up when it counts.</p>
+        <p class="writings-intro">Notes on digital workers, cloud security, and systems that hold up when it counts. Filter by tag or sort the list.</p>
       </div>
+      <div class="writings-toolbar" aria-label="Filter and sort writings">
+        <div class="writings-filters" role="group" aria-label="Filter by tag">
+          <span class="writings-toolbar-label">Tags</span>
+          <div id="writings-tag-filters" class="writings-tag-filters"></div>
+        </div>
+        <div class="writings-sort">
+          <label for="writings-sort">Sort</label>
+          <select id="writings-sort">
+            <option value="newest">Newest</option>
+            <option value="oldest">Oldest</option>
+            <option value="title">Title A–Z</option>
+          </select>
+        </div>
+      </div>
+      <p id="writings-status" class="writings-status" aria-live="polite"></p>
       <div id="blog-grid" class="grid writings-grid" aria-live="polite"></div>
     </section>
 
