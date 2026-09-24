@@ -237,11 +237,12 @@ ${ogImageMetaTags(post.cover, image)}
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
   ${goatCounterSnippet()}
 </head>
 <body class="writing-page">
+  <div class="page-atmosphere" aria-hidden="true"></div>
   <a class="skip-link" href="#writing-content">Skip to main content</a>
   <header class="site-header" aria-label="Site header">
     <nav class="container nav" aria-label="Primary navigation">
