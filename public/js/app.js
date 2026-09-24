@@ -4,51 +4,6 @@ async function getJSON(url) {
   return response.json();
 }
 
-function estimateReadTime(text) {
-  const words = (text || "").trim().split(/\s+/).filter(Boolean).length;
-  return `${Math.max(1, Math.ceil(words / 200))} min read`;
-}
-
-function projectCard(repo) {
-  return `
-    <article class="card">
-      <h3><a href="${repo.url}" target="_blank" rel="noopener">${repo.name}</a></h3>
-      <p>${repo.description || "No description provided."}</p>
-      <div class="card-meta">
-        <span class="badge">Star ${repo.stars}</span>
-        ${repo.highlight ? `<span class="badge">${repo.highlight}</span>` : ""}
-        <span class="badge status-live">${repo.fallback ? "Cached" : "Live"}</span>
-      </div>
-    </article>
-  `;
-}
-
-function blogCard(post, index, latestSlug) {
-  const tags = (post.tags || [])
-    .map((t) => `<button type="button" class="badge tag-badge" data-tag="${escapeAttr(t)}" aria-label="Filter by ${escapeAttr(t)}">${escapeHtml(t)}</button>`)
-    .join("");
-  const cover = post.cover
-    ? `<div class="card-cover"><img src="${post.cover}" alt="" loading="lazy" decoding="async"></div>`
-    : `<div class="card-cover card-cover-fallback" aria-hidden="true"></div>`;
-  const isLatest = latestSlug && post.slug === latestSlug;
-  const latest = isLatest ? `<span class="badge latest-badge">Latest</span>` : "";
-  return `
-    <article class="card writing-card${isLatest ? " writing-card-latest" : ""}" data-slug="${escapeAttr(post.slug)}">
-      ${cover}
-      <div class="card-body">
-        <h3><a href="/writings/${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a></h3>
-        <p>${escapeHtml(post.excerpt)}</p>
-        <div class="card-meta">
-          ${latest}
-          <span class="badge">${escapeHtml(post.date || "Undated")}</span>
-          <span class="badge">${estimateReadTime(post.excerpt)}</span>
-        </div>
-        <p class="card-meta">${tags}</p>
-      </div>
-    </article>
-  `;
-}
-
 function escapeHtml(value) {
   return String(value || "")
     .replace(/&/g, "&amp;")
@@ -59,6 +14,61 @@ function escapeHtml(value) {
 
 function escapeAttr(value) {
   return escapeHtml(value).replace(/'/g, "&#39;");
+}
+
+function formatDisplayDate(dateStr) {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr || "Undated";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC"
+  });
+}
+
+function projectCard(repo) {
+  const title = repo.name || "Project";
+  const description = repo.description || "Open on GitHub for details.";
+  return `
+    <article class="card work-card">
+      <h3><a href="${escapeAttr(repo.url)}" target="_blank" rel="noopener">${escapeHtml(title)}</a></h3>
+      <p>${escapeHtml(description)}</p>
+      <div class="card-meta">
+        ${repo.highlight ? `<span class="badge">${escapeHtml(repo.highlight)}</span>` : ""}
+        <span class="badge">${repo.fallback ? "Cached" : "On GitHub"}</span>
+      </div>
+    </article>
+  `;
+}
+
+function blogCard(post, latestSlug) {
+  const visibleTags = (post.tags || []).slice(0, 2);
+  const tags = visibleTags
+    .map((t) => `<button type="button" class="badge tag-badge" data-tag="${escapeAttr(t)}" aria-label="Filter by ${escapeAttr(t)}">${escapeHtml(t)}</button>`)
+    .join("");
+  const cover = post.cover
+    ? `<div class="card-cover"><img src="${escapeAttr(post.cover)}" alt="" loading="lazy" decoding="async"></div>`
+    : `<div class="card-cover card-cover-fallback" aria-hidden="true"></div>`;
+  const isLatest = latestSlug && post.slug === latestSlug;
+  const latest = isLatest ? `<span class="badge latest-badge">Latest</span>` : "";
+  const dateLabel = post.displayDate || formatDisplayDate(post.date);
+  const readLabel = post.readMinutes ? `${post.readMinutes} min read` : "";
+  return `
+    <article class="card writing-card${isLatest ? " writing-card-latest" : ""}" data-slug="${escapeAttr(post.slug)}">
+      ${cover}
+      <div class="card-body">
+        <h3><a href="/writings/${encodeURIComponent(post.slug)}">${escapeHtml(post.title)}</a></h3>
+        <p>${escapeHtml(post.excerpt)}</p>
+        <div class="card-meta">
+          ${latest}
+          <span class="badge">${escapeHtml(dateLabel)}</span>
+          ${readLabel ? `<span class="badge">${escapeHtml(readLabel)}</span>` : ""}
+        </div>
+        ${tags ? `<p class="card-meta">${tags}</p>` : ""}
+      </div>
+    </article>
+  `;
 }
 
 const writingsState = {
@@ -118,9 +128,14 @@ function sortedFilteredPosts() {
 function renderTagFilters() {
   const host = document.getElementById("writings-tag-filters");
   if (!host) return;
-  const tags = tagFrequency(writingsState.posts);
-  // Prefer tags used more than once; always include the active tag if set.
-  const visible = tags.filter((item) => item.count > 1 || item.tag === writingsState.tag);
+  const tags = tagFrequency(writingsState.posts).filter((item) => item.count > 1 || item.tag === writingsState.tag);
+  const narrow = window.matchMedia("(max-width: 700px)").matches;
+  const limit = narrow ? 4 : 8;
+  let visible = tags.slice(0, limit);
+  if (writingsState.tag && !visible.some((item) => item.tag === writingsState.tag)) {
+    const active = tags.find((item) => item.tag === writingsState.tag);
+    if (active) visible = [active, ...visible].slice(0, limit);
+  }
   const chips = [
     { tag: "", label: "All" },
     ...visible.map((item) => ({ tag: item.tag, label: item.tag }))
@@ -148,7 +163,7 @@ function renderWritings() {
   }
 
   target.classList.remove("loading");
-  target.innerHTML = posts.map((post, index) => blogCard(post, index, writingsState.latestSlug)).join("");
+  target.innerHTML = posts.map((post) => blogCard(post, writingsState.latestSlug)).join("");
   if (status) {
     status.textContent = writingsState.tag
       ? `${posts.length} writing${posts.length === 1 ? "" : "s"} tagged “${writingsState.tag}”`
@@ -197,6 +212,33 @@ function initWritingsControls() {
       setWritingsTag(btn.getAttribute("data-tag") || "");
     });
   }
+  window.addEventListener("resize", () => {
+    if (writingsState.posts.length) renderTagFilters();
+  });
+}
+
+function renderLoading(target, count) {
+  target.classList.add("loading");
+  target.innerHTML = Array.from({ length: count }, () => `
+    <article class="card">
+      <h3>Loading...</h3>
+      <p>Fetching content...</p>
+    </article>
+  `).join("");
+}
+
+async function loadProjects() {
+  const target = document.getElementById("projects-grid");
+  if (!target) return;
+  renderLoading(target, 3);
+  try {
+    const data = await getJSON("/api/showcase");
+    target.classList.remove("loading");
+    target.innerHTML = data.repos.map(projectCard).join("");
+  } catch (_err) {
+    target.classList.remove("loading");
+    target.innerHTML = `<article class="card"><p>Unable to load selected work right now.</p></article>`;
+  }
 }
 
 async function loadBlog() {
@@ -215,56 +257,6 @@ async function loadBlog() {
   }
 }
 
-async function openArticle(slug) {
-  const dialog = document.getElementById("article-dialog");
-  const title = document.getElementById("article-title");
-  const date = document.getElementById("article-date");
-  const body = document.getElementById("article-body");
-  body.textContent = "Loading article...";
-  dialog.showModal();
-  try {
-    const post = await getJSON(`/api/blog/${encodeURIComponent(slug)}`);
-    title.textContent = post.title;
-    date.textContent = `${post.date} | ${estimateReadTime(post.body)}`;
-    body.innerHTML = post.html;
-  } catch (_err) {
-    body.textContent = "Unable to load this article right now.";
-  }
-}
-
-function initArticleDialog() {
-  const dialog = document.getElementById("article-dialog");
-  if (!dialog) return;
-  const close = dialog.querySelector(".dialog-close");
-  if (close) close.addEventListener("click", () => dialog.close());
-  dialog.addEventListener("click", (event) => {
-    if (event.target === dialog) dialog.close();
-  });
-}
-
-function renderLoading(target, count) {
-  target.classList.add("loading");
-  target.innerHTML = Array.from({ length: count }, () => `
-    <article class="card">
-      <h3>Loading...</h3>
-      <p>Fetching content...</p>
-    </article>
-  `).join("");
-}
-
-async function loadProjects() {
-  const target = document.getElementById("projects-grid");
-  renderLoading(target, 3);
-  try {
-    const data = await getJSON("/api/showcase");
-    target.classList.remove("loading");
-    target.innerHTML = data.repos.map(projectCard).join("");
-  } catch (_err) {
-    target.classList.remove("loading");
-    target.innerHTML = `<article class="card"><p>Unable to load projects right now.</p></article>`;
-  }
-}
-
 function initMobileNav() {
   const toggle = document.querySelector(".menu-toggle");
   const nav = document.getElementById("primary-nav");
@@ -274,10 +266,16 @@ function initMobileNav() {
     toggle.setAttribute("aria-expanded", String(!expanded));
     nav.classList.toggle("open");
   });
+  nav.querySelectorAll("a").forEach((link) => {
+    link.addEventListener("click", () => {
+      toggle.setAttribute("aria-expanded", "false");
+      nav.classList.remove("open");
+    });
+  });
 }
 
 function initInteractions() {
-  const revealItems = document.querySelectorAll(".hero-panel, .linkedin-card, .section, .footer");
+  const revealItems = document.querySelectorAll(".hero-panel, .hero-portrait, .section, .footer");
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -292,21 +290,10 @@ function initInteractions() {
     document.documentElement.style.setProperty("--pointer-x", `${event.clientX}px`);
     document.documentElement.style.setProperty("--pointer-y", `${event.clientY}px`);
   });
-
-  document.querySelectorAll(".card, .linkedin-card").forEach((card) => {
-    card.addEventListener("pointermove", (event) => {
-      const bounds = card.getBoundingClientRect();
-      const rotateX = ((event.clientY - bounds.top) / bounds.height - 0.5) * -3;
-      const rotateY = ((event.clientX - bounds.left) / bounds.width - 0.5) * 3;
-      card.style.setProperty("--tilt", `perspective(900px) rotateX(${rotateX}deg) rotateY(${rotateY}deg)`);
-    });
-    card.addEventListener("pointerleave", () => card.style.removeProperty("--tilt"));
-  });
 }
 
 document.getElementById("year").textContent = new Date().getFullYear();
 initMobileNav();
-initArticleDialog();
 initInteractions();
 loadProjects();
 loadBlog();

@@ -1,34 +1,25 @@
 {
   "repos": [
     {
-      "repo": "chkp-bryans/terraform-azure-vwan-checkpoint",
-      "description": "Deploy Azure Virtual WAN, Hub, & CP NVAs all-in-one",
-      "stars": 0,
-      "highlight": "Azure + Check Point"
-    },
-    {
       "repo": "chkp-bryans/web-detective",
-      "description": "A Python toolkit for investigating web behavior and security signals.",
+      "title": "Web Detective",
+      "description": "Python toolkit for investigating web behavior and security signals—useful when automation has to trust what a site actually does.",
       "stars": 0,
       "highlight": "Security tooling"
     },
     {
       "repo": "chkp-bryans/Check_Point_Hardening_App",
-      "description": "Hardening scan/evidence/remediation for Check Point gateways and management",
+      "title": "Check Point Hardening App",
+      "description": "Scan, evidence, and remediation for Check Point gateways and management—hardening you can show, not just claim.",
       "stars": 0,
-      "highlight": "Check Point hardening"
+      "highlight": "Hardening"
     },
     {
-      "repo": "chkp-bryans/CloudGuardIaaS",
-      "description": "CloudGuard Network Security templates, Terraform, tools",
+      "repo": "chkp-bryans/terraform-azure-vwan-checkpoint",
+      "title": "Azure vWAN + Check Point",
+      "description": "One-shot Terraform for Azure Virtual WAN, hub, and Check Point NVAs—cloud security infrastructure as code.",
       "stars": 0,
-      "highlight": "CloudGuard IaaS"
-    },
-    {
-      "repo": "chkp-bryans/CME-scripts",
-      "description": "Custom gateway scripts for Check Point Cloud Management Extension (CME).",
-      "stars": 0,
-      "highlight": "CME automation"
+      "highlight": "Azure + Check Point"
     }
   ]
 }

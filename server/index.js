@@ -25,7 +25,8 @@ app.use(
         "script-src": ["'self'", "https://gc.zgo.at", "https://cdn.jsdelivr.net"],
         "connect-src": ["'self'", "https://*.goatcounter.com", "https://gc.zgo.at", "https://cdn.jsdelivr.net"],
         "img-src": ["'self'", "data:", "https:", "https://*.goatcounter.com"],
-        "style-src": ["'self'", "https:", "'unsafe-inline'"],
+        "style-src": ["'self'", "https:", "'unsafe-inline'", "https://fonts.googleapis.com"],
+        "font-src": ["'self'", "https://fonts.gstatic.com", "data:"],
         // Mermaid may use workers/blobs when rendering
         "worker-src": ["'self'", "blob:"],
         "child-src": ["'self'", "blob:"]
@@ -73,6 +74,7 @@ function getBlogPosts() {
     const slug = path.basename(file, ".md");
     const raw = fs.readFileSync(file, "utf8");
     const { meta, body } = parseFrontMatter(raw);
+    const words = body.trim().split(/\s+/).filter(Boolean).length;
     return {
       slug,
       title: meta.title || slug,
@@ -80,11 +82,24 @@ function getBlogPosts() {
       excerpt: meta.excerpt || body.slice(0, 160),
       tags: meta.tags ? meta.tags.split(",").map((t) => t.trim()) : [],
       cover: meta.cover || "",
+      wordCount: words,
+      readMinutes: Math.max(1, Math.ceil(words / 200)),
       html: marked.parse(body)
     };
   });
 
   return posts.sort((a, b) => (a.date < b.date ? 1 : -1));
+}
+
+function formatDisplayDate(dateStr) {
+  if (!dateStr || !/^\d{4}-\d{2}-\d{2}$/.test(dateStr)) return dateStr || "";
+  const [y, m, d] = dateStr.split("-").map(Number);
+  return new Date(Date.UTC(y, m - 1, d)).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC"
+  });
 }
 
 function escapeHtml(value) {
@@ -190,11 +205,14 @@ function renderWritingPage(post) {
   const url = `${SITE_URL}/writings/${encodeURIComponent(post.slug)}`;
   const image = absoluteUrl(post.cover || "/bs.jpg");
   const tags = (post.tags || [])
+    .slice(0, 4)
     .map((t) => `<span class="badge">${escapeHtml(t)}</span>`)
     .join("");
   const cover = post.cover
     ? `<img class="writing-cover" src="${escapeHtml(post.cover)}" alt="">`
     : "";
+  const displayDate = formatDisplayDate(post.date);
+  const readLabel = post.readMinutes ? `${post.readMinutes} min read` : "";
   return `<!doctype html>
 <html lang="en">
 <head>
@@ -217,6 +235,9 @@ ${ogImageMetaTags(post.cover, image)}
   <meta name="twitter:description" content="${escapeHtml(post.excerpt)}">
   <meta name="twitter:image" content="${escapeHtml(image)}">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
   ${goatCounterSnippet()}
 </head>
@@ -233,6 +254,7 @@ ${ogImageMetaTags(post.cover, image)}
       </a>
       <div class="nav-links">
         <a href="/#writings">Writings</a>
+        <a href="/#work">Selected work</a>
         <a href="/#about">About</a>
         <a href="/#contact">Contact</a>
       </div>
@@ -241,7 +263,7 @@ ${ogImageMetaTags(post.cover, image)}
   <main id="writing-content" class="container writing-main">
     <p class="writing-back"><a href="/#writings">&larr; All writings</a></p>
     <article class="writing-article">
-      <p class="eyebrow">${escapeHtml(post.date || "")}</p>
+      <p class="eyebrow">${escapeHtml([displayDate, readLabel].filter(Boolean).join(" · "))}</p>
       <h1>${escapeHtml(post.title)}</h1>
       <div class="card-meta writing-meta">${tags}</div>
       ${cover}
@@ -249,7 +271,7 @@ ${ogImageMetaTags(post.cover, image)}
     </article>
   </main>
   <footer class="container footer">
-    <small>&copy; ${new Date().getFullYear()} bryansmith.tech</small>
+    <small>&copy; ${new Date().getFullYear()} Bryan Smith · bryansmith.tech</small>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.min.js"></script>
   <script src="/js/mermaid-boot.js"></script>
@@ -316,13 +338,18 @@ app.get("/api/showcase", async (_req, res) => {
       return res.status(500).json({ error: "Invalid showcase configuration" });
     }
     const repos = await Promise.all(
-      config.repos.slice(0, 5).map(async (item) => {
+      config.repos.slice(0, 3).map(async (item) => {
         try {
           const live = await fetchRepo(item.repo);
-          return { ...live, highlight: item.highlight || "" };
+          return {
+            ...live,
+            name: item.title || live.name,
+            description: item.description || live.description,
+            highlight: item.highlight || ""
+          };
         } catch (_err) {
           return {
-            name: item.repo.split("/")[1] || item.repo,
+            name: item.title || item.repo.split("/")[1] || item.repo,
             full_name: item.repo,
             description: item.description || "",
             stars: item.stars || 0,
@@ -345,9 +372,11 @@ app.get("/api/blog", (_req, res) => {
       slug: post.slug,
       title: post.title,
       date: post.date,
+      displayDate: formatDisplayDate(post.date),
       excerpt: post.excerpt,
       tags: post.tags,
       cover: post.cover,
+      readMinutes: post.readMinutes,
       url: `/writings/${post.slug}`
     }));
     res.json({ posts });
