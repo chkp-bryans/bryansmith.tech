@@ -783,18 +783,33 @@ select:focus-visible {
 @media (max-width: 940px) {
   .hero {
     grid-template-columns: 1fr;
-    padding-top: 36px;
+    padding: 28px 0 36px;
+    gap: 18px;
   }
 
   .hero-portrait {
     order: -1;
-    max-width: 420px;
+    max-width: 360px;
     margin: 0 auto;
     width: 100%;
+    padding: 20px 18px 16px;
   }
 
   .portrait-frame {
-    width: min(100%, 220px);
+    width: min(100%, 180px);
+    margin-bottom: 12px;
+  }
+
+  .portrait-caption {
+    font-size: 0.9rem;
+  }
+
+  .hero-panel {
+    padding: 24px 20px 26px;
+  }
+
+  .cta-row {
+    margin-top: 20px;
   }
 
   h1 {
@@ -832,22 +847,18 @@ select:focus-visible {
     grid-template-columns: 1fr;
   }
 
-  .hero-panel {
-    padding: 26px 20px;
-  }
-
   .brand-lockup {
     font-size: 1rem;
+  }
+
+  .logo-domain {
+    font-size: 0.62rem;
   }
 }
 
 @media (max-width: 640px) {
   .writings-featured {
     padding: 20px 14px 18px;
-  }
-
-  .logo-domain {
-    display: none;
   }
 }
 
