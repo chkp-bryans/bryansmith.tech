@@ -36,7 +36,7 @@ function projectCard(repo) {
       <p>${escapeHtml(description)}</p>
       <div class="card-meta">
         ${repo.highlight ? `<span class="badge">${escapeHtml(repo.highlight)}</span>` : ""}
-        <span class="badge">${repo.fallback ? "Cached" : "On GitHub"}</span>
+        <span class="badge">GitHub</span>
       </div>
     </article>
   `;
