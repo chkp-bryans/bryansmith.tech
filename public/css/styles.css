@@ -277,21 +277,6 @@ h3 {
   filter: saturate(0.92) contrast(1.04);
 }
 
-.portrait-status {
-  position: absolute;
-  left: 10px;
-  right: 10px;
-  bottom: 10px;
-  padding: 5px 8px;
-  border: 1px solid rgba(137, 240, 209, 0.35);
-  border-radius: 8px;
-  color: var(--text);
-  background: rgba(7, 12, 23, 0.78);
-  font-size: 0.66rem;
-  text-align: center;
-  backdrop-filter: blur(8px);
-}
-
 .linkedin-card::after {
   content: "";
   position: absolute;
@@ -557,8 +542,116 @@ button:focus-visible {
   color: var(--muted);
 }
 
+.writings-toolbar {
+  margin-top: 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px 20px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.writings-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px 10px;
+  align-items: center;
+  min-width: 0;
+  flex: 1 1 280px;
+}
+
+.writings-toolbar-label,
+.writings-sort label {
+  color: var(--muted);
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.writings-tag-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.tag-filter {
+  appearance: none;
+  border: 1px solid var(--border);
+  color: #d8e7ff;
+  background: rgba(108, 178, 255, 0.1);
+  border-radius: 999px;
+  padding: 4px 12px;
+  font: inherit;
+  font-size: 0.8rem;
+  line-height: 1.4;
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.tag-filter:hover {
+  border-color: rgba(137, 240, 209, 0.45);
+}
+
+.tag-filter.is-active {
+  color: #081427;
+  background: linear-gradient(120deg, var(--accent-2), var(--accent));
+  border-color: transparent;
+}
+
+.tag-filter:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.writings-sort {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 0 0 auto;
+}
+
+.writings-sort select {
+  appearance: none;
+  color: var(--text);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 6px 32px 6px 12px;
+  font: inherit;
+  font-size: 0.88rem;
+  background-image:
+    linear-gradient(45deg, transparent 50%, var(--muted) 50%),
+    linear-gradient(135deg, var(--muted) 50%, transparent 50%);
+  background-position:
+    calc(100% - 14px) 55%,
+    calc(100% - 9px) 55%;
+  background-size: 5px 5px, 5px 5px;
+  background-repeat: no-repeat;
+  cursor: pointer;
+}
+
+.writings-sort select:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.writings-status {
+  margin: 12px 0 0;
+  min-height: 1.2em;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.badge.tag-badge {
+  cursor: pointer;
+}
+
+.badge.tag-badge:hover {
+  border-color: rgba(137, 240, 209, 0.45);
+}
+
 .writings-grid {
-  margin-top: 18px;
+  margin-top: 14px;
 }
 
 .writing-card {
