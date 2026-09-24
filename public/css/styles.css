@@ -176,6 +176,14 @@ body {
   border-bottom: 1px solid var(--line);
 }
 
+#writings,
+#work,
+#about,
+#contact,
+#top {
+  scroll-margin-top: 84px;
+}
+
 .hero-copy-block,
 .hero-portrait,
 .section,
@@ -814,23 +822,43 @@ select:focus-visible {
 @media (max-width: 940px) {
   .hero {
     grid-template-columns: 1fr;
-    padding: 36px 0 32px;
-    gap: 28px;
+    padding: 20px 0 28px;
+    gap: 16px;
   }
 
   .hero-portrait {
     justify-self: start;
-    width: min(100%, 320px);
+    width: min(42vw, 168px);
     order: -1;
   }
 
   .portrait-frame {
-    transform: rotate(0deg);
-    box-shadow: 8px 8px 0 rgba(15, 122, 114, 0.18);
+    transform: rotate(-2deg);
+    box-shadow: 6px 6px 0 rgba(15, 122, 114, 0.2);
+    border-radius: 14px 14px 4px 14px;
+  }
+
+  .portrait-caption {
+    margin-top: 12px;
+    font-size: 0.82rem;
+  }
+
+  .brand-lockup {
+    margin-bottom: 12px;
+  }
+
+  .hero-copy {
+    font-size: 0.98rem;
+  }
+
+  .cta-row {
+    margin-top: 18px;
   }
 
   h1 {
     max-width: 16ch;
+    font-size: clamp(1.7rem, 7.2vw, 2.35rem);
+    margin-bottom: 10px;
   }
 }
 
@@ -862,7 +890,15 @@ select:focus-visible {
   }
 
   .brand-name {
-    font-size: clamp(2.1rem, 11vw, 3rem);
+    font-size: clamp(1.85rem, 9vw, 2.55rem);
+  }
+
+  #writings,
+  #work,
+  #about,
+  #contact,
+  #top {
+    scroll-margin-top: 76px;
   }
 }
 
@@ -873,6 +909,16 @@ select:focus-visible {
 
   .contact-panel {
     padding: 24px 18px;
+  }
+
+  .hero {
+    /* Side-by-side brand block under a compact portrait row */
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero-portrait {
+    width: min(36vw, 132px);
   }
 }
 
