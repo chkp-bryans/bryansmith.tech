@@ -275,7 +275,7 @@ function initMobileNav() {
 }
 
 function initInteractions() {
-  const revealItems = document.querySelectorAll(".hero-panel, .hero-portrait, .section, .footer");
+  const revealItems = document.querySelectorAll(".hero-copy-block, .hero-portrait, .section, .footer");
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
