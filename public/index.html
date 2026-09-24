@@ -6,6 +6,9 @@
   <title>Bryan Smith | Digital Workers, Cloud Security &amp; Infrastructure</title>
   <meta name="description" content="Bryan Smith teaches individuals, SMBs, and enterprises how to put digital workers to work, with cloud cybersecurity leadership at Check Point and deep roots in resilient network, wireless, and phone infrastructure.">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -21,8 +24,8 @@
       </a>
       <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav">Menu</button>
       <div id="primary-nav" class="nav-links">
-        <a href="#projects">Projects</a>
         <a href="#writings">Writings</a>
+        <a href="#work">Selected work</a>
         <a href="#about">About</a>
         <a href="#contact">Contact</a>
       </div>
@@ -32,37 +35,27 @@
   <main id="main-content">
     <section id="top" class="hero container">
       <div class="hero-panel">
-        <p class="eyebrow">Digital workers · Cloud security · Infrastructure roots</p>
+        <p class="brand-lockup">Bryan Smith <span aria-hidden="true">·</span> bryansmith.tech</p>
         <h1>I help you put digital workers to work.</h1>
-        <p class="hero-copy">Not AI hype. Digital assistants and digital workers that take real load off your day. I teach individuals, small-midsize businesses, and enterprises how to use them where it actually matters.</p>
-        <p class="hero-copy hero-copy-secondary">By day I&rsquo;m a cybersecurity professional focused on cloud at Check Point, where I lead and help teams ship secure cloud work that holds up. Before that I spent years as an IT infrastructure engineer building resilient, scalable network, wireless, and phone systems. That background is why I care that the tools and platforms around digital workers actually hold up.</p>
+        <p class="hero-copy">Not AI hype—digital assistants that take real load off your day. I teach individuals, SMBs, and enterprises how to use them where it actually matters.</p>
         <div class="cta-row">
-          <a class="btn primary" href="#contact">Learn digital workers with me</a>
-          <a class="btn" href="#projects">View projects</a>
-          <a class="btn" href="#writings">Writings</a>
+          <a class="btn primary" href="#contact">Talk with me</a>
+          <a class="btn" href="#writings">Read writings</a>
         </div>
       </div>
-      <aside class="linkedin-card" aria-label="LinkedIn profile highlight">
+      <aside class="hero-portrait" aria-label="Bryan Smith">
         <div class="portrait-frame">
           <img src="/bs.jpg" alt="Bryan Smith" width="720" height="720">
         </div>
-        <p class="eyebrow">Work with me</p>
-        <h2>Let&rsquo;s connect on LinkedIn</h2>
-        <p>Digital workers for real day-to-day leverage. Cloud security leadership at Check Point. Infrastructure roots in network, wireless, and voice.</p>
-        <a class="btn" target="_blank" rel="noopener" href="https://www.linkedin.com/in/bryan-j-smith/">View LinkedIn Profile</a>
+        <p class="portrait-caption">Cloud security by day. Digital workers for real work.</p>
       </aside>
-    </section>
-
-    <section id="projects" class="container section" aria-labelledby="projects-heading">
-      <h2 id="projects-heading">GitHub Showcase</h2>
-      <div id="projects-grid" class="grid" aria-live="polite"></div>
     </section>
 
     <section id="writings" class="container section writings-featured" aria-labelledby="writings-heading">
       <div class="writings-header">
-        <p class="eyebrow">Featured</p>
-        <h2 id="writings-heading">Writings</h2>
-        <p class="writings-intro">Notes on digital workers, cloud security, and systems that hold up when it counts. Filter by tag or sort the list.</p>
+        <p class="eyebrow">Writings</p>
+        <h2 id="writings-heading">Notes from the edge of a problem</h2>
+        <p class="writings-intro">Digital workers, cloud security, and systems that hold up when it counts.</p>
       </div>
       <div class="writings-toolbar" aria-label="Filter and sort writings">
         <div class="writings-filters" role="group" aria-label="Filter by tag">
@@ -82,41 +75,49 @@
       <div id="blog-grid" class="grid writings-grid" aria-live="polite"></div>
     </section>
 
-    <dialog id="article-dialog" class="article-dialog" aria-labelledby="article-title">
-      <button class="dialog-close" type="button" aria-label="Close article">&times;</button>
-      <article>
-        <p class="eyebrow" id="article-date"></p>
-        <h2 id="article-title"></h2>
-        <div id="article-body"></div>
-      </article>
-    </dialog>
+    <section id="work" class="container section" aria-labelledby="work-heading">
+      <div class="section-header">
+        <p class="eyebrow">Selected work</p>
+        <h2 id="work-heading">Security and infrastructure I ship</h2>
+        <p class="section-intro">A few repos that show how I build—secure cloud, hardening, and automation underneath the digital-worker story.</p>
+      </div>
+      <div id="projects-grid" class="grid work-grid" aria-live="polite"></div>
+    </section>
 
     <section id="about" class="container section two-col" aria-labelledby="about-heading">
       <div>
-        <h2 id="about-heading">About</h2>
-        <p>I help people get full value from digital assistants and digital workers: how to use them, how to teach the leverage, and how to wire them into real work across individuals, SMBs, and enterprises. My day job is cloud cybersecurity at Check Point, where I lead and help teams ship secure cloud work. My earlier career was IT infrastructure: designing and running highly resilient network, wireless, and phone environments. That mix (automation up front, security and reliability underneath) is the through-line.</p>
+        <p class="eyebrow">About</p>
+        <h2 id="about-heading">Who I teach, and how we start</h2>
+        <p>I work with individuals who want leverage from digital assistants, SMBs wiring them into day-to-day ops, and enterprise teams that need the same ideas to survive security and reliability review.</p>
+        <p>A first conversation is usually concrete: one workflow that burns time, what a digital worker could own, and what has to be true underneath (access, data, cloud controls) so it does not fall over.</p>
+        <p class="about-aside">By day I lead cloud cybersecurity work at Check Point. Earlier I built resilient network, wireless, and voice infrastructure. That mix is why I care that the platforms around automation actually hold up.</p>
       </div>
       <div class="skills-card">
-        <h3>Core strengths</h3>
+        <h3>What a first session covers</h3>
         <ul>
-          <li>Digital assistants and digital workers in real workflows</li>
-          <li>Teaching individuals, SMBs, and enterprises how to leverage them</li>
-          <li>Cloud cybersecurity and secure cloud architecture</li>
-          <li>Technical leadership and teaching teams how to leverage new tools</li>
-          <li>Resilient network, wireless, and voice infrastructure</li>
-          <li>Platform automation and secure delivery</li>
+          <li>Pick one high-friction workflow worth automating</li>
+          <li>Map where a digital assistant or worker fits</li>
+          <li>Name the security and reliability constraints early</li>
+          <li>Leave with a small, shippable next step</li>
         </ul>
       </div>
     </section>
 
-    <section id="contact" class="container section" aria-labelledby="contact-heading">
-      <h2 id="contact-heading">Contact</h2>
-      <p>GitHub: <a target="_blank" rel="noopener" href="https://github.com/chkp-bryans">@chkp-bryans</a> | LinkedIn: <a target="_blank" rel="noopener" href="https://www.linkedin.com/in/bryan-j-smith/">bryan-j-smith</a></p>
+    <section id="contact" class="container section contact-section" aria-labelledby="contact-heading">
+      <div class="contact-panel">
+        <p class="eyebrow">Contact</p>
+        <h2 id="contact-heading">Let&rsquo;s talk digital workers</h2>
+        <p class="section-intro">Message me on LinkedIn with the workflow you want to improve. I read every note and will share the fastest way to continue—including email when that fits better.</p>
+        <div class="cta-row">
+          <a class="btn primary" target="_blank" rel="noopener" href="https://www.linkedin.com/in/bryan-j-smith/">Message me on LinkedIn</a>
+          <a class="btn" target="_blank" rel="noopener" href="https://github.com/chkp-bryans">GitHub @chkp-bryans</a>
+        </div>
+      </div>
     </section>
   </main>
 
   <footer class="container footer">
-    <small>&copy; <span id="year"></span> bryansmith.tech. All rights reserved.</small>
+    <small>&copy; <span id="year"></span> Bryan Smith · bryansmith.tech</small>
   </footer>
 
   <script src="/js/app.js" defer></script>
