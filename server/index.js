@@ -338,7 +338,7 @@ app.get("/api/showcase", async (_req, res) => {
       return res.status(500).json({ error: "Invalid showcase configuration" });
     }
     const repos = await Promise.all(
-      config.repos.slice(0, 3).map(async (item) => {
+      config.repos.slice(0, 4).map(async (item) => {
         try {
           const live = await fetchRepo(item.repo);
           return {

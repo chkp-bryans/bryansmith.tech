@@ -8,13 +8,6 @@
       "highlight": "Security tooling"
     },
     {
-      "repo": "chkp-bryans/Check_Point_Hardening_App",
-      "title": "Check Point Hardening App",
-      "description": "Scan, evidence, and remediation for Check Point gateways and management—hardening you can show, not just claim.",
-      "stars": 0,
-      "highlight": "Hardening"
-    },
-    {
       "repo": "chkp-bryans/terraform-azure-vwan-checkpoint",
       "title": "Azure vWAN + Check Point",
       "description": "One-shot Terraform for Azure Virtual WAN, hub, and Check Point NVAs—cloud security infrastructure as code.",
