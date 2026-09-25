@@ -482,20 +482,30 @@ h3 {
   gap: 10px;
   align-items: center;
   margin-top: 20px;
+  font-size: 0; /* kill whitespace text nodes between anchors */
 }
 
 .social-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 42px;
-  height: 42px;
+  width: 44px;
+  height: 44px;
   border: 1.5px solid var(--line);
-  border-radius: var(--radius);
+  border-radius: 8px;
   color: var(--ink);
   background: var(--paper-2);
-  text-decoration: none;
+  text-decoration: none !important;
+  box-shadow: none;
   transition: transform 160ms ease, border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+}
+
+.social-link:link,
+.social-link:visited,
+.social-link:hover,
+.social-link:active {
+  color: var(--ink);
+  text-decoration: none !important;
 }
 
 .social-link:hover {
@@ -503,6 +513,39 @@ h3 {
   border-color: var(--signal);
   color: var(--signal-deep);
   background: rgba(15, 122, 114, 0.06);
+}
+
+.social-icon {
+  display: block;
+  width: 20px;
+  height: 20px;
+  background-color: currentColor;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+}
+
+.social-icon-github {
+  -webkit-mask-image: url("/icons/github.svg");
+  mask-image: url("/icons/github.svg");
+}
+
+.social-icon-x {
+  -webkit-mask-image: url("/icons/x.svg");
+  mask-image: url("/icons/x.svg");
+}
+
+.social-icon-instagram {
+  -webkit-mask-image: url("/icons/instagram.svg");
+  mask-image: url("/icons/instagram.svg");
+}
+
+.social-icon-reddit {
+  -webkit-mask-image: url("/icons/reddit.svg");
+  mask-image: url("/icons/reddit.svg");
 }
 
 .footer {
@@ -517,13 +560,22 @@ h3 {
   justify-content: space-between;
 }
 
+.footer a {
+  text-decoration: none;
+}
+
 .social-links-footer {
   margin-top: 0;
 }
 
 .social-links-footer .social-link {
-  width: 36px;
-  height: 36px;
+  width: 38px;
+  height: 38px;
+}
+
+.social-links-footer .social-icon {
+  width: 18px;
+  height: 18px;
 }
 
 .loading .card {
